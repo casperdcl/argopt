@@ -1,6 +1,6 @@
 PYO = python -O
 
 all: argopt.py
-	$(PYO) $<
+	$(PYO) $< one two
 clean:
 	rm *.py[co]

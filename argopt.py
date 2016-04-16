@@ -10,12 +10,6 @@ __version__ = '0.0.1'
 __license__ = __licence__  # weird foreign language
 
 
-try:
-    _range = xrange
-except:
-    _range = range
-
-
 def OptRepr(self):
     try:
         return 'Option(%r, %r, %r, %r, %r)' % (
@@ -45,10 +39,13 @@ def RE_OPTS(padding=1):
 # RE_OPTS_BOOL = re.compile(r' {8}(\w+)  : bool', flags=re.M)
 
 
-def argopt(doc='', *args, **kwargs):
+def debug(s):
+    print('debug: ' + str(s))
+
+
+def docopt_parser(doc='', *args, **kwargs):
     """
-    doc  : docopt compatible, with optional type specifiers
-         [default: '':str]
+    doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
     options = docopt.parse_defaults(doc)
     usage = docopt.printable_usage(doc)
@@ -63,26 +60,98 @@ def argopt(doc='', *args, **kwargs):
     args = pattern.flat(docopt.Argument)
     opts = pattern.flat(docopt.Option)
     for o in opts:
-        if type(o.value) is not str:
+        if type(o.value) is bool:
+            o.type = bool
             continue
         i = o.value.rfind(':')
         if i >= 0:
             o.type = eval(o.value[i + 1:])
             o.value = typecast(o.value[:i], o.value[i + 1:])
 
+    # debug(args)
+    # debug(opts)
+
     return args, opts
 
+
+def argopt(doc='', *args, **kwargs):
+    """
+    Parameters
+    ----------
+    doc  : docopt compatible, with optional type specifiers
+         [default: '':str]
+
+    Returns
+    -------
+    out  : argparse.ArgumentParser
+    """
+    pu = docopt.printable_usage(doc)
+    from argparse import ArgumentParser
+    parser = ArgumentParser(
+        prog=pu.split()[1],
+        description=doc[:doc.find(pu)])
+
+    args, opts = docopt_parser(doc, *args, **kwargs)
+    # TODO: add_argument_group
+    # TODO: add_mutually_exclusive_group
+    # TEST: prog name
+    # TEST: prog description
+    # TODO: argument descriptions
+    # TEST: option defaults
+    # TODO: repetitive arguments/lists
+    # TODO: action count
+    # TODO: action choices
+    # TEST: option types
+    for a in args:
+        parser.add_argument(a.name[1:-1])  # strip out encompassing '<>'
+    for o in opts:
+        # debug(o)
+        if o.name not in ('-h', '--help'):
+            k = {'default': o.value}
+            try:
+                if o.type == bool:
+                    k['action'] = 'store_true'
+                else:
+                    k['type'] = o.type
+            except AttributeError:
+                k['type'] = str
+
+            if (o.short):
+                parser.add_argument(o.short, o.name, **k)
+            else:
+                parser.add_argument(o.name, **k)
+
+    return parser
+
+
+# such fun
+# from gooey import Gooey
+# @Gooey()
+def main(doc):
+    parser = argopt(doc, version=__version__)
+    print('debug:')
+    parser.print_help()
+
+    args = parser.parse_args()
+    debug(args)
+
+
 if __name__ == '__main__':
-    args, opts = argopt('''
-Example
+    doc = '''
+Example programme description.
+You should be able to do
+    args = argopt(__doc__).parse_args()
+instead of
+    args = docopt(__doc__)
 
 Usage:
     test.py [-h | --help | options] <f> [<g>...]
 
 Options:
-    --anarg=<b>  Its [default: 1e3:int]
-    --patts=<p>  Its [default: '':str]
-    -f, --force  Force
-''')
-    print(args)
-    print(opts)
+    --anarg=<a>    Description here [default: 1e3:int].
+    --patts=<p>    Or [default: '':str].
+    --bar=<b>      Another [default: something] should assume str.
+    -f, --force    Force.
+    -v, --version  Print version and exit.
+'''
+    main(doc)
