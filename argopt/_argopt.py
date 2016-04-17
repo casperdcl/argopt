@@ -1,6 +1,9 @@
 from __future__ import print_function
 import docopt
+import argparse
 import re
+from ._utils import _range, typecast, debug, set_nargs
+
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
 __date__ = "2016"
 __licence__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
@@ -8,12 +11,6 @@ __all__ = ["argopt"]
 __copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
 __version__ = '0.0.1'
 __license__ = __licence__  # weird foreign language
-
-
-try:
-    _range = xrange
-except:
-    _range = range
 
 
 def OptRepr(self):
@@ -28,21 +25,6 @@ def OptRepr(self):
         return 'Option(%r, %r, %r, %r, %r)' % (
             self.short, self.long, self.argcount, self.value, None)
 docopt.Option.__repr__ = OptRepr
-
-
-def typecast(val, typ):
-    if val == 'None':
-        return None
-    if type(typ) is not str:
-        typ = str(typ)
-    return eval(typ + '(' + str(val) + ')')
-
-
-def RE_OPTS(padding=1):
-  n = str(int(padding))
-  return re.compile(r'\s{' + n + '}(\w+)\s{2,}:\s*(\w+)', flags=re.M)
-# RE_OPTS_SOME = re.compile(r' {8}(\w+)  : (str|int|float)', flags=re.M)
-# RE_OPTS_BOOL = re.compile(r' {8}(\w+)  : bool', flags=re.M)
 
 
 RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()"
@@ -60,10 +42,6 @@ def findall_args(re, pattern):
     pattern  : str
     """
     return [docopt.Argument(i[0], eval(i[1])) for i in re.findall(pattern)]
-
-
-def debug(*s):
-    print('debug: ' + str(s[0] if len(s) == 1 else s))
 
 
 def docopt_parser(doc='', *args, **kwargs):
@@ -111,14 +89,11 @@ def docopt_parser(doc='', *args, **kwargs):
         if plus_args[i] in star_args:
             star_args.pop(i)
 
-    for a in once_args:
-        a.nargs = None  # setting to `1` creates single-item list
-    for a in qest_args:
-        a.nargs = '?'
-    for a in star_args:
-        a.nargs = '*'
-    for a in plus_args:
-        a.nargs = '+'
+    set_nargs(once_args, None)  # setting to `1` creates single-item list
+    set_nargs(qest_args, '?')
+    set_nargs(qest_args, '?')
+    set_nargs(star_args, '*')
+    set_nargs(plus_args, '+')
 
     # debug('p', pattern)
     # debug('o', opts)
@@ -130,20 +105,20 @@ def docopt_parser(doc='', *args, **kwargs):
     return once_args + qest_args + star_args + plus_args, opts
 
 
-def argopt(doc='', *args, **kwargs):
+def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
     """
     Parameters
     ----------
     doc  : docopt compatible, with optional type specifiers
          [default: '':str]
+    argparser  : Argument parser class [default: argparse.ArgumentParser]
 
     Returns
     -------
-    out  : argparse.ArgumentParser
+    out  : argparser object (default: argparse.ArgumentParser)
     """
     pu = docopt.printable_usage(doc)
-    from argparse import ArgumentParser
-    parser = ArgumentParser(
+    parser = argparser(
         prog=pu.split()[1],
         description=doc[:doc.find(pu)])
 
@@ -181,36 +156,3 @@ def argopt(doc='', *args, **kwargs):
                 parser.add_argument(o.name, **k)
 
     return parser
-
-
-# such fun
-# from gooey import Gooey
-# @Gooey()
-def main(doc):
-    parser = argopt(doc, version=__version__)
-    debug('print_help:')
-    parser.print_help()
-
-    args = parser.parse_args()
-    debug(args)
-
-
-if __name__ == '__main__':
-    doc = '''
-Example programme description.
-You should be able to do
-    args = argopt(__doc__).parse_args()
-instead of
-    args = docopt(__doc__)
-
-Usage:
-    test.py [-h | --help | options] <f> [<g>...]
-
-Options:
-    --anarg=<a>    Description here [default: 1e3:int].
-    --patts=<p>    Or [default: '':str].
-    --bar=<b>      Another [default: something] should assume str.
-    -f, --force    Force.
-    -v, --version  Print version and exit.
-'''
-    main(doc)

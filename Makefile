@@ -1,6 +1,6 @@
 PYO = python -O
 
-testrun: argopt.py
+testrun: test.py
 	$(PYO) $< one two
 clean:
-	rm *.py[co]
+	rm -f *.py[co] argopt/*.py[co]
