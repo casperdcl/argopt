@@ -3,7 +3,7 @@ import argparse
 import re
 from ._docopt import Argument, Option, AnyOptions, \
     parse_defaults, parse_pattern, printable_usage, formal_usage
-from ._utils import _range, typecast, debug, set_nargs
+from ._utils import _range, debug, set_nargs
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
 __date__ = "2016"
@@ -47,16 +47,6 @@ def docopt_parser(doc='', *args, **kwargs):
 
     # args = pattern.flat(Argument)
     opts = pattern.flat(Option)
-    for o in opts:
-        if o.value is None:
-            continue
-        if type(o.value) is bool:
-            o.type = bool
-            continue
-        i = o.value.rfind(':')
-        if i >= 0:
-            o.type = eval(o.value[i + 1:])
-            o.value = typecast(o.value[:i], o.value[i + 1:])
 
     str_pattern = str(pattern)
     once_args = findall_args(RE_ARG_ONCE, str_pattern)  # once (arg)
@@ -136,6 +126,7 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
     # TEST: option defaults
     # TEST: nargs
     # TEST: option types
+    # TEST: metavar
     for a in args:
         # debug('a', a.desc)
         parser.add_argument(a.name[1:-1],  # strip out encompassing '<>'
@@ -148,12 +139,16 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
         if o.name not in ('-h', '--help'):
             k = {'default': o.value, 'help': o.desc}
             try:
-                if o.type == bool:
-                    k['action'] = 'store_true'
-                else:
-                    k['type'] = o.type
+                typ = o.type
             except AttributeError:
                 k['type'] = str
+                k['metavar'] = o.meta
+            else:
+                if typ == bool:
+                    k['action'] = 'store_true'
+                else:
+                    k['type'] = typ
+                    k['metavar'] = o.meta
 
             if (o.short):
                 parser.add_argument(o.short, o.name, **k)

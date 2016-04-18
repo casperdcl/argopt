@@ -8,9 +8,10 @@
 
 """
 import re
+from ._utils import typecast
 
 
-__version__ = '0.6.2'
+__version__ = '0.6.2-casper.2'
 
 
 class DocoptLanguageError(Exception):
@@ -178,16 +179,28 @@ class Command(Argument):
 
 class Option(ChildPattern):
     def __init__(self, short=None, long=None, argcount=0, value=False,
-                 desc=None):
+                 desc=None, meta=None, typ=None):
         assert argcount in (0, 1)
         self.short, self.long = short, long
         self.argcount, self.value = argcount, value
-        self.value = None if value is False and argcount else value
+        value = None if value is False and argcount else value
+        self.value = value
+        self.type = typ
         self.desc = desc
+        self.meta = meta
+
+        if (value is not None) and (typ is None):
+            if type(value) is bool:
+                self.type = bool
+            else:
+                i = value.rfind(':')
+                if i >= 0:
+                    self.type = eval(value[i + 1:])
+                    self.value = typecast(value[:i], value[i + 1:])
 
     @classmethod
     def parse(class_, option_description):
-        short, long, argcount, value = None, None, 0, False
+        short, long, argcount, value, meta = None, None, 0, False, None
         options, _, description = option_description.strip().partition('  ')
         options = options.replace(',', ' ').replace('=', ' ')
         for s in options.split():
@@ -196,11 +209,12 @@ class Option(ChildPattern):
             elif s.startswith('-'):
                 short = s
             else:
+                meta = s[1:-1] if s.startswith('<') and s.endswith('>') else s
                 argcount = 1
         if argcount:
             matched = re.findall('\[default: (.*)\]', description, flags=re.I)
             value = matched[0] if matched else None
-        return class_(short, long, argcount, value, description)
+        return class_(short, long, argcount, value, description, meta)
 
     def single_match(self, left):
         for n, p in enumerate(left):
@@ -214,15 +228,13 @@ class Option(ChildPattern):
 
     def __repr__(self):
         try:
-            return 'Option(%r, %r, %r, %r, %r)' % (
-                self.short, self.long, self.argcount, self.value,
-                self.type
-                # self.typestr =>
-                # str(self.type).rstrip(">'").lstrip("<type '")
-            )
+            typ = self.type
+            # self.typestr =>
+            # str(self.type).rstrip(">'").lstrip("<type '")
         except AttributeError:
-            return 'Option(%r, %r, %r, %r, %r)' % (
-                self.short, self.long, self.argcount, self.value, None)
+            typ = None
+        return 'Option(%r, %r, %r, %r, %r, %r)' % (
+            self.short, self.long, self.argcount, self.value, typ, self.meta)
 
 
 class Required(ParentPattern):
