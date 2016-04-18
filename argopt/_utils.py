@@ -32,6 +32,10 @@ def debug(*s):
     print('debug: ' + str(s[0] if len(s) == 1 else s))
 
 
-def set_nargs(args, n):
+def set_nargs(all_args, args, n):
     for a in args:
         a.nargs = n
+        try:
+            a.desc = [i for i in all_args if i.name == a.name][0].desc
+        except:
+            pass
