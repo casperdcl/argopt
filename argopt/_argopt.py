@@ -3,7 +3,7 @@ import argparse
 import re
 from ._docopt import Argument, Option, AnyOptions, \
     parse_defaults, parse_pattern, printable_usage, formal_usage
-from ._utils import _range, debug, set_nargs
+from ._utils import _range, set_nargs
 from ._version import __version__  # NOQA
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"

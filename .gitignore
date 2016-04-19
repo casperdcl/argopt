@@ -1,4 +1,6 @@
 argopt/*.py[co]
+argopt/tests/*.py[co]
 argopt.egg-info/
 build/
 dist/
+.coverage
