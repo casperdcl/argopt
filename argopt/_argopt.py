@@ -111,6 +111,7 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
     ----
     add_argument_group
     add_mutually_exclusive_group
+    (better) subparser support
     (docopt extension) action choices
     (docopt extension) action count
     """
