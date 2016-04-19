@@ -1,4 +1,5 @@
 from argopt import argopt
+import argparse
 try:
     from StringIO import StringIO
 except:
@@ -24,30 +25,34 @@ Arguments:
     -f, --force           Force.
     -v, --version         Print version and exit.
 '''
-    parser = argopt(doc, version='0.1.2-3.4')
-    res = StringIO()
-    parser.print_help(file=res)
-    assert (res.getvalue() == '''\
-usage: test.py [-h] [--bar b] [-v] [-f] [--anarg a] [-p PAT] x [y [y ...]]
+    parser = argopt(doc, version='0.1.2-3.4',
+                    formatter_class=argparse.RawDescriptionHelpFormatter)
+    fs = StringIO()
+    parser.print_help(file=fs)
+    res = fs.getvalue()
 
-Example programme description. You should be able to do args =
-argopt(__doc__).parse_args() instead of args = docopt(__doc__)
-
-positional arguments:
+    try:
+        assert ('''Example programme description.
+You should be able to do
+    args = argopt(__doc__).parse_args()
+instead of
+    args = docopt(__doc__)''' in res)
+        assert (i in res for i in '''positional arguments:
   x                    A file.
   y
 
 optional arguments:
   -h, --help           show this help message and exit
   --bar b              Another [default: something] should assume str.
-  -v, --version        Print version and exit.
+  -v, --version        show program's version number and exit
   -f, --force          Force.
   --anarg a            Description here [default: 1e3:int].
-  -p PAT, --patts PAT  Or [default: '':str].
-''')
+  -p PAT, --patts PAT  Or [default: '':str].'''.split('\n'))
 
-    # parser = argopt(doc, argparser=GooeyParser)
+    except AssertionError:
+        raise AssertionError(res)
 
     args = parser.parse_args(args=' such test much is'.split())
+    assert (args.x == 'such')
     assert (args.x == 'such')
     assert (args.y == 'test much is'.split())

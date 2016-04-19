@@ -30,6 +30,5 @@ Arguments:
     -p PAT, --patts PAT   Or [default: '':str].
     --bar=<b>             Another [default: something] should assume str.
     -f, --force           Force.
-    -v, --version         Print version and exit.
 '''
     main(doc)

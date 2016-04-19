@@ -31,7 +31,7 @@ def findall_args(re, pattern):
     return [Argument(i[0], eval(i[1])) for i in re.findall(pattern)]
 
 
-def docopt_parser(doc='', *args, **kwargs):
+def docopt_parser(doc='', *_args, **_kwargs):
     """
     doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
@@ -47,6 +47,13 @@ def docopt_parser(doc='', *args, **kwargs):
 
     # args = pattern.flat(Argument)
     opts = pattern.flat(Option)
+
+    if 'version' in _kwargs:
+        if not any(o.name == '--version' for o in opts):
+            if any(o.name == '-v' for o in opts):
+                opts.append(Option('--version'))
+            else:
+                opts.append(Option('-v', '--version'))
 
     str_pattern = str(pattern)
     once_args = findall_args(RE_ARG_ONCE, str_pattern)  # once (arg)
@@ -82,7 +89,7 @@ def docopt_parser(doc='', *args, **kwargs):
     return once_args + qest_args + star_args + plus_args, opts
 
 
-def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
+def argopt(doc='', argparser=argparse.ArgumentParser, *_args, **_kwargs):
     """
     Note that `docopt` supports neither type specifiers nor default
     positional arguments. We support both here.
@@ -116,11 +123,13 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
     (docopt extension) action count
     """
     pu = printable_usage(doc)
+    version = _kwargs.pop('version', None)
     parser = argparser(
         prog=pu.split()[1],
-        description=doc[:doc.find(pu)])
+        description=doc[:doc.find(pu)],
+        **_kwargs)
 
-    args, opts = docopt_parser(doc, *args, **kwargs)
+    args, opts = docopt_parser(doc, *_args, **_kwargs)
     # TEST: prog name
     # TEST: prog description
     # TEST: argument descriptions
@@ -128,6 +137,7 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
     # TEST: nargs
     # TEST: option types
     # TEST: metavar
+    # TEST: version
     for a in args:
         # debug('a', a.desc)
         parser.add_argument(a.name[1:-1],  # strip out encompassing '<>'
@@ -137,7 +147,11 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
                             )
     for o in opts:
         # debug(o)
-        if o.name not in ('-h', '--help'):
+        if o.name in ('-h', '--help'):
+            continue
+        if '--version' == o.name:
+            k = {'action': 'version', 'version': version}
+        else:
             k = {'default': o.value, 'help': o.desc}
             try:
                 typ = o.type
@@ -151,9 +165,9 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
                     k['type'] = typ
                     k['metavar'] = o.meta
 
-            if (o.short):
-                parser.add_argument(o.short, o.name, **k)
-            else:
-                parser.add_argument(o.name, **k)
+        if (o.short):
+            parser.add_argument(o.short, o.name, **k)
+        else:
+            parser.add_argument(o.name, **k)
 
     return parser
