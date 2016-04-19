@@ -3,7 +3,8 @@ argopt
 
 doc to argparse driven by docopt
 
-|PyPi Status|
+|PyPi Status| |PyPi Downloads|
+|Build Status| |Coverage Status| |Branch Coverage Status|
 
 ------------------------------------------
 
@@ -158,5 +159,11 @@ Authors
 
 - Casper da Costa-Luis <casper@caspersci.uk.to>
 
+.. |Build Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
+   :target: https://travis-ci.org/casperdcl/argopt
+.. |Coverage Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg
+   :target: https://coveralls.io/r/casperdcl/argopt
+.. |Branch Coverage Status| image:: https://codecov.io/github/casperdcl/argopt/coverage.svg?branch=master
+   :target: https://codecov.io/github/casperdcl/argopt?branch=master
 .. |PyPi Status| image:: https://img.shields.io/pypi/v/argopt.svg
    :target: https://pypi.python.org/pypi/argopt
