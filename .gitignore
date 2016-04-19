@@ -1,1 +1,4 @@
 argopt/*.py[co]
+argopt.egg-info/
+build/
+dist/

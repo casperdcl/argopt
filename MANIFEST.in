@@ -1,0 +1,11 @@
+# Misc
+include .coveragerc
+include Makefile
+include README.rst
+include tox.ini
+
+# Test suite
+recursive-include argopt/tests *.py
+
+# Examples/Documentation
+recursive-include examples *

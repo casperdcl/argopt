@@ -1,0 +1,5 @@
+[run]
+branch = True
+omit =
+    argopt/tests/*
+    argopt/_argopt_gui.py

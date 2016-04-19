@@ -4,13 +4,13 @@ import re
 from ._docopt import Argument, Option, AnyOptions, \
     parse_defaults, parse_pattern, printable_usage, formal_usage
 from ._utils import _range, debug, set_nargs
+from ._version import __version__  # NOQA
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
 __date__ = "2016"
 __licence__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
 __all__ = ["argopt"]
 __copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
-__version__ = '0.0.1'
 __license__ = __licence__  # weird foreign language
 
 
