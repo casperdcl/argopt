@@ -3,7 +3,7 @@ argopt
 
 doc to argparse driven by docopt
 
-|PyPi Status| |PyPi Downloads|
+|PyPi Status|
 |Build Status| |Coverage Status| |Branch Coverage Status|
 
 ------------------------------------------
