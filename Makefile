@@ -35,7 +35,6 @@
 
 alltests:
 	@+make testcoverage
-	@+make testperf
 	@+make flake8
 	@+make testsetup
 

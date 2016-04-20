@@ -11,7 +11,7 @@ import re
 from ._utils import typecast
 
 
-__version__ = '0.6.2-casper.2'
+__version__ = '0.6.2-casper.3'
 
 
 class DocoptLanguageError(Exception):
@@ -117,7 +117,7 @@ class ChildPattern(Pattern):
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (self.__class__.__name__, self.name,
-                                  self.value, self.type)
+                                   self.value, self.type)
 
     def flat(self, *types):
         return [self] if not types or type(self) in types else []

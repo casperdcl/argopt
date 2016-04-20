@@ -8,7 +8,7 @@ from subprocess import STDOUT
 __all__ = ["__version__"]
 
 # major, minor, patch, -extra
-version_info = 0, 2, 1
+version_info = 0, 3, 0
 
 # Nice string for the version
 __version__ = '.'.join(map(str, version_info))
@@ -26,7 +26,7 @@ if (_sh is not None) and (len(version_info) < 4):  # pragma: no cover
 
     cur_hash = commit_hash()
     if cur_hash is not None:
-        last_release = commit_hash('v' + __version__).rstrip(':').lower()
+        last_release = commit_hash('v' + __version__)
 
         if (last_release is None) or (cur_hash not in last_release):
             __version__ += '-' + cur_hash

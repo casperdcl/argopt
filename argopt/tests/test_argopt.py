@@ -23,7 +23,6 @@ Arguments:
     -p PAT, --patts PAT   Or [default: '':str].
     --bar=<b>             Another [default: something] should assume str.
     -f, --force           Force.
-    -v, --version         Print version and exit.
 '''
     parser = argopt(doc, version='0.1.2-3.4',
                     formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -56,3 +55,45 @@ optional arguments:
     assert (args.x == 'such')
     assert (args.x == 'such')
     assert (args.y == 'test much is'.split())
+    try:
+        args = parser.parse_args(args=' -v'.split())
+    except SystemExit as e:
+        assert(str(e) == '0')
+    else:
+        raise ValueError('System should have exited with code 0')
+
+
+def test_verbose_and_version():
+    doc = '''Usage:
+    test.py [options]
+
+Arguments:
+    -v, --verbose   Not silent.
+'''
+    parser = argopt(doc, version='4.3.2-1.0')
+    fs = StringIO()
+    parser.print_help(file=fs)
+    res = fs.getvalue()
+
+    try:
+        assert (i in res for i in '''usage: test.py [-h] [-v] [--version]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --verbose         Not silent.
+  --version, --version  show program's version number and exit
+'''.split('\n'))
+
+    except AssertionError:
+        raise AssertionError(res)
+
+    args = parser.parse_args(args=' -v'.split())
+    assert (args.verbose)
+    args = parser.parse_args(args=[])
+    assert (not args.verbose)
+    try:
+        args = parser.parse_args(args=' --version'.split())
+    except SystemExit as e:
+        assert(str(e) == '0')
+    else:
+        raise ValueError('System should have exited with code 0')

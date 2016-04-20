@@ -28,7 +28,8 @@ def findall_args(re, pattern):
     re  : RE_COMPILED
     pattern  : str
     """
-    return [Argument(i[0], i[1], i[2].rstrip(">'").lstrip("<type '")) for i in re.findall(pattern)]
+    return [Argument(i[0], i[1], i[2].rstrip(">'").lstrip("<type '"))
+            for i in re.findall(pattern)]
 
 
 def docopt_parser(doc='', *_args, **_kwargs):
@@ -50,7 +51,7 @@ def docopt_parser(doc='', *_args, **_kwargs):
 
     if 'version' in _kwargs:
         if not any(o.name == '--version' for o in opts):
-            if any(o.name == '-v' for o in opts):
+            if any('-v' in (o.name, o.short) for o in opts):
                 opts.append(Option('--version'))
             else:
                 opts.append(Option('-v', '--version'))
