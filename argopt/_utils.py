@@ -17,7 +17,7 @@ def typecast(val, typ):
     if val == 'None':
         return None
     if type(typ) is not str:
-        typ = str(typ)
+        typ = str(typ).lstrip("<type '").rstrip("'>")
     return eval(typ + '(' + str(val) + ')')
 
 
@@ -25,7 +25,10 @@ def set_nargs(all_args, args, n):
     for a in args:
         a.nargs = n
         try:
-            a.desc = [i for i in all_args if i.name == a.name][0].desc
+            _a = [i for i in all_args if i.name == a.name][0]
+            a.value = _a.value
+            a.desc = _a.desc
+            a.type = _a.type
         except:
             pass
 

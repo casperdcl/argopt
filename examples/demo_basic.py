@@ -1,14 +1,8 @@
 from argopt import argopt
-# from gooey import Gooey, GooeyParser
 
 
-# @Gooey
 def main(doc):
-    parser = argopt(doc, version='0.1.2-3.4')
-    # parser.print_help()
-
-    # parser = argopt(doc, argparser=GooeyParser)
-
+    parser = argopt(doc)
     args = parser.parse_args()
     print (args)
 

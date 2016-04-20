@@ -101,13 +101,23 @@ class Pattern(object):
 
 
 class ChildPattern(Pattern):
-    def __init__(self, name, value=None, desc=None):
+    def __init__(self, name, value=None, desc=None, typ=None):
         self.name = name
         self.value = value
         self.desc = desc
+        self.type = typ
+        if (value is not None) and (typ is None):
+            if type(value) is bool:
+                self.type = bool
+            elif type(value) is str:
+                i = value.rfind(':')
+                if i >= 0:
+                    self.type = eval(value[i + 1:])
+                    self.value = typecast(value[:i], value[i + 1:])
 
     def __repr__(self):
-        return '%s(%r, %r)' % (self.__class__.__name__, self.name, self.value)
+        return '%s(%r, %r, %r)' % (self.__class__.__name__, self.name,
+                                  self.value, self.type)
 
     def flat(self, *types):
         return [self] if not types or type(self) in types else []
@@ -151,7 +161,7 @@ class Argument(ChildPattern):
     def single_match(self, left):
         for n, p in enumerate(left):
             if type(p) is Argument:
-                return n, Argument(self.name, p.value)
+                return n, Argument(self.name, p.value, p.desc, p.type)
         return None, None
 
     @classmethod
@@ -159,7 +169,7 @@ class Argument(ChildPattern):
         name, _, description = argument_description.strip().partition('  ')
         matched = re.findall('\[default: (.*)\]', description, flags=re.I)
         value = matched[0] if matched else None
-        return class_(name, value[0] if value else None, description)
+        return class_(name, value, description)
 
 
 class Command(Argument):

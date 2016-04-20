@@ -6,6 +6,16 @@ doc to argparse driven by docopt
 |PyPi Status|
 |Build Status| |Coverage Status| |Branch Coverage Status|
 
+Define your command line interface (CLI) from a docstring (rather than the
+other way around). Because it's easy. It's quick. Painless. Then focus on
+what's actually important - using the arguments in the rest of your program.
+
+The problem is that this is not always flexible. Still need all the features of
+`argparse`? Now have the best of both worlds... all the extension such as
+`argcomplete <https://github.com/kislyuk/argcomplete>`_ or
+`Gooey <https://github.com/chriskiehl/Gooey/>`_ but with the simple syntax of
+`docopt <https://github.com/docopt/docopt/>`_.
+
 ------------------------------------------
 
 .. contents:: Table of contents

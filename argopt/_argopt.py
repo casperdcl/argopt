@@ -15,12 +15,12 @@ __license__ = __licence__  # weird foreign language
 
 
 RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()"
-                         "Argument\('(<\S+?>)', (\S+?)\)")
+                         "Argument\('(<\S+?>)', (\S+?), (\S+?)\)")
 RE_ARG_STAR = re.compile(r"Optional\(OneOrMore\(Argument\("
-                         "'(<\S+?>)', (\S+?)\)\)\)")
+                         "'(<\S+?>)', (\S+?), (\S+?)\)\)\)")
 RE_ARG_PLUS = re.compile(r"(?<!Optional\()"
-                         "OneOrMore\(Argument\('(<\S+?>)', (\S+?)\)\)")
-RE_ARG_QEST = re.compile(r"Optional\(Argument\('(<\S+?>)', (\S+?)\)\)")
+                         "OneOrMore\(Argument\('(<\S+?>)', (\S+?), (\S+?)\)\)")
+RE_ARG_QEST = re.compile(r"Optional\(Argument\('(<\S+?>)', (\S+?), (\S+?)\)\)")
 
 
 def findall_args(re, pattern):
@@ -28,7 +28,7 @@ def findall_args(re, pattern):
     re  : RE_COMPILED
     pattern  : str
     """
-    return [Argument(i[0], eval(i[1])) for i in re.findall(pattern)]
+    return [Argument(i[0], i[1], i[2].rstrip(">'").lstrip("<type '")) for i in re.findall(pattern)]
 
 
 def docopt_parser(doc='', *_args, **_kwargs):
@@ -122,14 +122,8 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *_args, **_kwargs):
     (docopt extension) action choices
     (docopt extension) action count
     """
-    pu = printable_usage(doc)
-    version = _kwargs.pop('version', None)
-    parser = argparser(
-        prog=pu.split()[1],
-        description=doc[:doc.find(pu)],
-        **_kwargs)
 
-    args, opts = docopt_parser(doc, *_args, **_kwargs)
+    # TODO:
     # TEST: prog name
     # TEST: prog description
     # TEST: argument descriptions
@@ -138,13 +132,27 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *_args, **_kwargs):
     # TEST: option types
     # TEST: metavar
     # TEST: version
+
+    pu = printable_usage(doc)
+    args, opts = docopt_parser(doc, *_args, **_kwargs)
+
+    version = _kwargs.pop('version', None)
+    parser = argparser(
+        prog=pu.split()[1],
+        description=doc[:doc.find(pu)],
+        **_kwargs)
+
     for a in args:
         # debug('a', a.desc)
+        k = {}
+        if a.type is not None:
+            k['type'] = a.type
+        if a.value is not None:
+            k['default'] = a.value
         parser.add_argument(a.name[1:-1],  # strip out encompassing '<>'
                             nargs=a.nargs,
-                            help=a.desc
-                            # , default=a.value
-                            )
+                            help=a.desc,
+                            **k)
     for o in opts:
         # debug(o)
         if o.name in ('-h', '--help'):
