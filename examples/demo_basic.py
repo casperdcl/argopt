@@ -21,8 +21,9 @@ Usage:
 Arguments:
     <x>                   A file.
     --anarg=<a>           Description here [default: 1e3:int].
-    -p PAT, --patts PAT   Or [default: '':str].
-    --bar=<b>             Another [default: something] should assume str.
+    -p PAT, --patts PAT   Or [default: None:file].
+    --bar=<b>             Another [default: something] should
+                          auto-wrap something in quotes and assume str.
     -f, --force           Force.
 '''
     main(doc)

@@ -12,9 +12,9 @@ what's actually important - using the arguments in the rest of your program.
 
 The problem is that this is not always flexible. Still need all the features of
 `argparse`? Now have the best of both worlds... all the extension such as
-`argcomplete <https://github.com/kislyuk/argcomplete>`_ or
-`Gooey <https://github.com/chriskiehl/Gooey/>`_ but with the simple syntax of
-`docopt <https://github.com/docopt/docopt/>`_.
+`argcomplete <https://github.com/kislyuk/argcomplete>`__ or
+`Gooey <https://github.com/chriskiehl/Gooey/>`__ but with the simple syntax of
+`docopt <https://github.com/docopt/docopt/>`__.
 
 ------------------------------------------
 
@@ -47,15 +47,15 @@ Changelog
 ---------
 
 The list of all changes is available either on
-`Github's Releases <https://github.com/casperdcl/argopt/releases>`_
+`Github's Releases <https://github.com/casperdcl/argopt/releases>`__
 or on crawlers such as
-`allmychanges.com <https://allmychanges.com/p/python/argopt/>`_.
+`allmychanges.com <https://allmychanges.com/p/python/argopt/>`__.
 
 
 Usage
 -----
 
-Standard `docopt <https://github.com/docopt/docopt>`_ docstring syntax applies.
+Standard `docopt <https://github.com/docopt/docopt>`__ docstring syntax applies.
 Additionally, some improvements and enhancements are supported, such as type
 checking and default positional arguments.
 
@@ -79,17 +79,25 @@ checking and default positional arguments.
         args = argopt(__doc__).parse_args()
     instead of
         args = docopt(__doc__)
+
     Usage:
         test.py [-h | options] <x> [<y>...]
+
     Arguments:
         <x>                   A file.
         --anarg=<a>           Description here [default: 1e3:int].
-        -p PAT, --patts PAT   Or [default: '':str].
-        --bar=<b>             Another [default: something] should assume str.
+        -p PAT, --patts PAT   Or [default: None:file].
+        --bar=<b>             Another [default: something] should
+                              auto-wrap something in quotes and assume str.
         -f, --force           Force.
-        -v, --version         Print version and exit.
     '''
         main(doc)
+
+Advanced usage and examples
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See the `examples <https://github.com/casperdcl/argopt/tree/master/examples>`__
+folder.
 
 
 Documentation
@@ -97,38 +105,42 @@ Documentation
 
 .. code:: python
 
-    def argopt(doc='', argparser=argparse.ArgumentParser, *args, **kwargs):
-        """
-        Note that `docopt` supports neither type specifiers nor default
-        positional arguments. We support both here.
+    def argopt(doc='', argparser=argparse.ArgumentParser, **_kwargs):
+      """
+      Note that `docopt` supports neither type specifiers nor default
+      positional arguments. We support both here.
 
-        Parameters
-        ----------
-        doc  : docopt compatible, with optional type specifiers
-             [default: '':str]
-        argparser  : Argument parser class [default: argparse.ArgumentParser]
+      Parameters
+      ----------
+      doc  : docopt compatible, with optional type specifiers
+           [default: '':str]
+      argparser  : Argument parser class [default: argparse.ArgumentParser]
+      version  : Version string [default: None:str]
+      _kwargs  : any `argparser` initialiser arguments
 
-        Returns
-        -------
-        out  : argparser object (default: argparse.ArgumentParser)
 
-        Usage
-        -----
-        Extension syntax example: [default: 1e3:int].
+      Returns
+      -------
+      out  : argparser object (default: argparse.ArgumentParser)
 
-        You should be able to do
-            parser = argopt(__doc__)
-            args   = parser.parse_args()
-        instead of
-            args = docopt(__doc__)
+      Usage
+      -----
+      Extension syntax example: [default: 1e3:int].
 
-        TODO
-        ----
-        add_argument_group
-        add_mutually_exclusive_group
-        (docopt extension) action choices
-        (docopt extension) action count
-        """
+      You should be able to do
+          parser = argopt(__doc__)
+          args   = parser.parse_args()
+      instead of
+          args = docopt(__doc__)
+
+      TODO
+      ----
+      add_argument_group
+      add_mutually_exclusive_group
+      (better) subparser support
+      (docopt extension) action choices
+      (docopt extension) action count
+      """
 
 
 Contributions

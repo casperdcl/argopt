@@ -32,7 +32,7 @@ def findall_args(re, pattern):
             for i in re.findall(pattern)]
 
 
-def docopt_parser(doc='', *_args, **_kwargs):
+def docopt_parser(doc='', **_kwargs):
     """
     doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
@@ -90,7 +90,7 @@ def docopt_parser(doc='', *_args, **_kwargs):
     return once_args + qest_args + star_args + plus_args, opts
 
 
-def argopt(doc='', argparser=argparse.ArgumentParser, *_args, **_kwargs):
+def argopt(doc='', argparser=argparse.ArgumentParser, **_kwargs):
     """
     Note that `docopt` supports neither type specifiers nor default
     positional arguments. We support both here.
@@ -100,6 +100,9 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *_args, **_kwargs):
     doc  : docopt compatible, with optional type specifiers
          [default: '':str]
     argparser  : Argument parser class [default: argparse.ArgumentParser]
+    version  : Version string [default: None:str]
+    _kwargs  : any `argparser` initialiser arguments
+
 
     Returns
     -------
@@ -135,7 +138,7 @@ def argopt(doc='', argparser=argparse.ArgumentParser, *_args, **_kwargs):
     # TEST: version
 
     pu = printable_usage(doc)
-    args, opts = docopt_parser(doc, *_args, **_kwargs)
+    args, opts = docopt_parser(doc, **_kwargs)
 
     version = _kwargs.pop('version', None)
     parser = argparser(
