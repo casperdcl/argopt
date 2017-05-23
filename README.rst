@@ -61,27 +61,14 @@ checking and default positional arguments.
 
 .. code:: python
 
-    from argopt import argopt
-
-
-    def main(doc):
-        parser = argopt(doc, version='0.1.2-3.4')
-        # parser.print_help()
-
-        args = parser.parse_args()
-        print (args)
-
-
-    if __name__ == '__main__':
-        doc = '''
-    Example programme description.
+    '''Example programme description.
     You should be able to do
         args = argopt(__doc__).parse_args()
     instead of
         args = docopt(__doc__)
 
     Usage:
-        test.py [-h | options] <x> [<y>...]
+        test.py [options] <x> [<y>...]
 
     Arguments:
         <x>                   A file.
@@ -91,7 +78,48 @@ checking and default positional arguments.
                               auto-wrap something in quotes and assume str.
         -f, --force           Force.
     '''
-        main(doc)
+    from argopt import argopt
+    __version__ = "0.1.2-3.4"
+
+
+    parser = argopt(__doc__, version=__version__).parse_args()
+    if args.force:
+        print(args)
+    else:
+        print(args.x)
+
+For comparison, the `docopt` equivalent would be:
+
+.. code:: python
+
+    '''Example programme description.
+
+    Usage:
+        test.py [options] <x> [<y>...]
+
+    Arguments:
+        <x>                   A file.
+        --anarg=<a>           int, Description here [default: 1e3].
+        -p PAT, --patts PAT   file, Or (default: None).
+        --bar=<b>             str, Another [default: something] should
+                              assume str like everything else.
+        -f, --force           Force.
+        -h, --help            Show this help message and exit.
+        -v, --version         Show program's version number and exit.
+
+    '''
+    from docopt import docopt
+    __version__ = "0.1.2-3.4"
+
+
+    args = docopt(__doc__, version=__version__)
+    args["--anarg"] = int(eval(args["--anarg"]))
+    if args["--patts"]:
+        args["--patts"] = open(args["--patts"])
+    if args["--force"]:
+        print(args)
+    else:
+        print(args["<x>"])
 
 Advanced usage and examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
