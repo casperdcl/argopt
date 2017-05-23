@@ -1,26 +1,22 @@
-sudo: false
 language: python
-python: 3.5
-# branches:  # remove travis double-check on pull requests in main repo
-#   only:
-#     - master
-#     - /^\d\.\d+$/
+python: 3.6
 env:
   - TOXENV=py26
   - TOXENV=py27
   - TOXENV=py33
   - TOXENV=py34
-  - TOXENV=py35
+  # - TOXENV=py35
+  - TOXENV=py36
   - TOXENV=pypy
-  - TOXENV=pypy3
+  # TODO: re-enable when Travis is fixed
+  # - TOXENV=pypy3
+  - TOXENV=pypy3.3-5.2-alpha1
   - TOXENV=flake8
 before_install:
   - pip install codecov
 install:
-  - pip install 'coverage<4'
-  - pip install tox coveralls
+  - pip install tox
 script:
   - tox
 after_success:
-  - coveralls
   - codecov
