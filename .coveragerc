@@ -3,3 +3,5 @@ branch = True
 omit =
     argopt/tests/*
     argopt/_docopt.py
+[report]
+show_missing = True
