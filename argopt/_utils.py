@@ -1,9 +1,9 @@
 import subprocess
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
-__date__ = "2016"
+__date__ = "2016-7"
 __licence__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
-__all__ = ["_range", "typecast", "set_nargs", "_sh"]
+__all__ = ["_range", "typecast", "set_nargs", "_sh", "DictAttrWrap"]
 __copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
 __license__ = __licence__  # weird foreign language
 
@@ -13,11 +13,23 @@ except:  # pragma: no cover
     _range = range
 
 
+class DictAttrWrap(object):
+    """Converting docopt-style dictionaries to argparse-style"""
+    def __init__(self, *a, **k):
+        self.d = dict(*a, **k)
+
+    def __getattr__(self, k):
+        return self.d.get('--' + k,
+                          self.d.get('<' + k + '>',
+                                     self.d.get('-' + k,
+                                                self.d.get(k))))
+
+
 def typecast(val, typ):
     if val == 'None':
         return None
     if type(typ) is not str:
-        typ = str(typ).lstrip("<type '").rstrip("'>")
+        typ = str(typ).lstrip("<type '").lstrip("<class '").rstrip("'>")
     return eval(typ + '(' + str(val) + ')')
 
 
