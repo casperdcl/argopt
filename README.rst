@@ -3,8 +3,11 @@ argopt
 
 doc to argparse driven by docopt
 
-|PyPi Status|
-|Build Status| |Coverage Status| |Branch Coverage Status|
+|PyPI-Status| |PyPI-Versions|
+
+|Build-Status| |Coverage-Status| |Branch-Coverage-Status| |Codacy-Grade|
+
+|LICENCE| |Donate|
 
 Define your command line interface (CLI) from a docstring (rather than the
 other way around). Because it's easy. It's quick. Painless. Then focus on
@@ -29,12 +32,16 @@ Installation
 Latest pypi stable release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+|PyPI-Status|
+
 .. code:: sh
 
     pip install argopt
 
 Latest development release on github
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+|GitHub-Status|
 
 Pull and install in the current directory:
 
@@ -194,9 +201,9 @@ To see all options, run:
 Licence
 -------
 
-OSI approved.
+Open Source (OSI approved): |LICENCE|
 
-Copyright (c) 2016 Casper da Costa-Luis.
+Copyright (c) 2016-7 Casper da Costa-Luis.
 
 This Source Code Form is subject to the terms of the
 Mozilla Public License, v. 2.0.
@@ -207,13 +214,23 @@ at `https://mozilla.org/MPL/2.0/ <https://mozilla.org/MPL/2.0/>`__.
 Authors
 -------
 
-- Casper da Costa-Luis <casper@caspersci.uk.to>
+- Casper da Costa-Luis (`@casperdcl <https://github.com/casperdcl/>`__) |Donate|
 
-.. |Build Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
+.. |Build-Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
    :target: https://travis-ci.org/casperdcl/argopt
-.. |Coverage Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg
+.. |Coverage-Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg
    :target: https://coveralls.io/r/casperdcl/argopt
-.. |Branch Coverage Status| image:: https://codecov.io/github/casperdcl/argopt/coverage.svg?branch=master
+.. |Branch-Coverage-Status| image:: https://codecov.io/github/casperdcl/argopt/coverage.svg?branch=master
    :target: https://codecov.io/github/casperdcl/argopt?branch=master
-.. |PyPi Status| image:: https://img.shields.io/pypi/v/argopt.svg
+.. |GitHub-Status| image:: https://img.shields.io/github/tag/casperdcl/argopt.svg?maxAge=2592000
+   :target: https://github.com/casperdcl/argopt/releases
+.. |PyPI-Status| image:: https://img.shields.io/pypi/v/argopt.svg
    :target: https://pypi.python.org/pypi/argopt
+.. |PyPI-Versions| image:: https://img.shields.io/pypi/pyversions/argopt.svg
+   :target: https://pypi.python.org/pypi/argopt
+.. |LICENCE| image:: https://img.shields.io/pypi/l/argopt.svg
+   :target: https://mozilla.org/MPL/2.0/
+.. |Codacy-Grade| image:: https://api.codacy.com/project/badge/Grade/5282d52c142d4c6ea24f978b03981c6f
+   :target: https://www.codacy.com/app/casper-dcl/argopt
+.. |Donate| image:: https://img.shields.io/badge/gift-donate-dc10ff.svg
+   :target: https://caspersci.uk.to/donate.html
