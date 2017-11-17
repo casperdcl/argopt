@@ -1,4 +1,4 @@
-'''Example programme description.
+"""Example programme description.
 You should be able to do
     args = argopt(__doc__).parse_args()
 instead of
@@ -16,7 +16,7 @@ Arguments:
     -f, --force           Force.
 
 
-'''
+"""
 from argopt import argopt
 __version__ = "0.1.2-3.4"
 

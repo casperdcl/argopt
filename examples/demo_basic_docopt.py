@@ -1,4 +1,4 @@
-'''Example programme description.
+"""Example programme description.
 
 This is the `docopt` equivalent of `demo_basic.py`.
 Note the need to manually cast arguments from strings to the required type.
@@ -16,7 +16,7 @@ Arguments:
     -f, --force           Force.
     -h, --help            Show this help message and exit.
     -v, --version         Show program's version number and exit.
-'''
+"""
 from docopt import docopt
 __version__ = "0.1.2-3.4"
 

@@ -2,7 +2,7 @@ from argopt import argopt
 import argparse
 try:
     from StringIO import StringIO
-except:
+except ImportError:
     from io import StringIO
 
 
@@ -88,7 +88,7 @@ optional arguments:
         raise AssertionError(res)
 
     args = parser.parse_args(args=' -v'.split())
-    assert (args.verbose)
+    assert args.verbose
     args = parser.parse_args(args=[])
     assert (not args.verbose)
     try:

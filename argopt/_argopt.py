@@ -177,7 +177,7 @@ def argopt(doc='', argparser=argparse.ArgumentParser, **_kwargs):
                     k['type'] = typ
                     k['metavar'] = o.meta
 
-        if (o.short):
+        if o.short:
             parser.add_argument(o.short, o.name, **k)
         else:
             parser.add_argument(o.name, **k)

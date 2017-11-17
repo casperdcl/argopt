@@ -1,4 +1,4 @@
-'''
+"""
 args = argopt(__doc__).parse_args()  # docopt(__doc__)
 
 Usage:
@@ -15,7 +15,7 @@ Arguments:
                           and assume str.
     --bar=<b>             Another [default: 3+2j:complex]
     -f, --force           Force.
-'''
+"""
 from argopt import argopt
 import sys
 import os

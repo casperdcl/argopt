@@ -9,7 +9,7 @@ __license__ = __licence__  # weird foreign language
 
 try:  # pragma: no cover
     _range = xrange
-except:  # pragma: no cover
+except NameError:  # pragma: no cover
     _range = range
 
 
@@ -28,7 +28,7 @@ class DictAttrWrap(object):
 def typecast(val, typ):
     if val == 'None':
         return None
-    if type(typ) is not str:
+    if not isinstance(typ, str):
         typ = str(typ).lstrip("<type '").lstrip("<class '").rstrip("'>")
     return eval(typ + '(' + str(val) + ')')
 
