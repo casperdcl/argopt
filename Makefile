@@ -75,9 +75,12 @@ prebuildclean:
 	@+python -c "import shutil; shutil.rmtree('argopt.egg-info', True)"
 coverclean:
 	@+python -c "import os; os.remove('.coverage') if os.path.exists('.coverage') else None"
+	@+python -c "import shutil; shutil.rmtree('argopt/__pycache__', True)"
+	@+python -c "import shutil; shutil.rmtree('argopt/tests/__pycache__', True)"
 clean:
 	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('*.py[co]')]"
 	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('argopt/*.py[co]')]"
+	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('examples/*.py[co]')]"
 	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('argopt/tests/*.py[co]')]"
 
 installdev:

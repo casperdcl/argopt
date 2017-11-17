@@ -1,6 +1,10 @@
 argopt/*.py[co]
 argopt/tests/*.py[co]
+# build
 argopt.egg-info/
 build/
 dist/
+# test
+.tox/
 .coverage
+__pycache__

@@ -173,13 +173,14 @@ setup(
     name='argopt',
     version=__version__,
     description='doc to argparse driven by docopt',
-    license=__licence__,
+    long_description=README_rst,
+    license=__licence__.lstrip('[').split(']')[0],
     author=__author__.split('<')[0].strip(),
     author_email=__author__.split('<')[1][1:-1],
     url='https://github.com/casperdcl/argopt',
+    bugtrack_url='https://github.com/casperdcl/argopt/issues',
     platforms=['any'],
     packages=['argopt'],
-    long_description=README_rst,
     classifiers=[
         # Trove classifiers
         # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)
@@ -205,7 +206,6 @@ setup(
         'Operating System :: POSIX :: SunOS/Solaris',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',

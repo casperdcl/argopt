@@ -7,7 +7,7 @@ from ._utils import _range, set_nargs
 from ._version import __version__  # NOQA
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
-__date__ = "2016"
+__date__ = "2016-7"
 __licence__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
 __all__ = ["argopt"]
 __copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
