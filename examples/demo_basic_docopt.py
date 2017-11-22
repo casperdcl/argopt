@@ -18,11 +18,12 @@ Arguments:
     -v, --version         Show program's version number and exit.
 """
 from docopt import docopt
+from ast import literal_eval
 __version__ = "0.1.2-3.4"
 
 
 args = docopt(__doc__, version=__version__)
-args["--anarg"] = int(eval(args["--anarg"]))
+args["--anarg"] = int(literal_eval(args["--anarg"]))
 if args["--patts"]:
     args["--patts"] = open(args["--patts"])
 

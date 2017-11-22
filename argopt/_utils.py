@@ -41,7 +41,7 @@ def set_nargs(all_args, args, n):
             a.value = _a.value
             a.desc = _a.desc
             a.type = _a.type
-        except:
+        except IndexError:
             pass
 
 

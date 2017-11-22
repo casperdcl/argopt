@@ -7,7 +7,7 @@ doc to argparse driven by docopt
 
 |Build-Status| |Coverage-Status| |Branch-Coverage-Status| |Codacy-Grade|
 
-|LICENCE| |Donate|
+|LICENCE| |Donate| |OpenHub-Status|
 
 Define your command line interface (CLI) from a docstring (rather than the
 other way around). Because it's easy. It's quick. Painless. Then focus on
@@ -214,6 +214,8 @@ at `https://mozilla.org/MPL/2.0/ <https://mozilla.org/MPL/2.0/>`__.
 Authors
 -------
 
+|OpenHub-Status|
+
 - Casper da Costa-Luis (`@casperdcl <https://github.com/casperdcl/>`__) |Donate|
 
 .. |Build-Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
@@ -228,6 +230,8 @@ Authors
    :target: https://pypi.python.org/pypi/argopt
 .. |PyPI-Versions| image:: https://img.shields.io/pypi/pyversions/argopt.svg
    :target: https://pypi.python.org/pypi/argopt
+.. |OpenHub-Status| image:: https://www.openhub.net/p/arg-opt/widgets/project_thin_badge?format=gif
+   :target: https://www.openhub.net/p/arg-opt?ref=Thin+badge
 .. |LICENCE| image:: https://img.shields.io/pypi/l/argopt.svg
    :target: https://mozilla.org/MPL/2.0/
 .. |Codacy-Grade| image:: https://api.codacy.com/project/badge/Grade/5282d52c142d4c6ea24f978b03981c6f
