@@ -238,4 +238,5 @@ setup(
              ' console terminal command line CLI UI gui gooey',
     test_suite='nose.collector',
     tests_require=['nose', 'flake8', 'coverage'],
+    requires=["docopt"] if sys.version_info[:2] == (2, 6) else [],
 )

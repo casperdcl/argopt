@@ -1,9 +1,16 @@
 from __future__ import print_function
-import argparse
+try:
+    from argparse import ArgumentParser
+except ImportError:
+    # py26
+    ArgumentParser = None
+
 import re
+import sys
+from docopt import docopt  # only for py26
 from ._docopt import Argument, Option, AnyOptions, \
     parse_defaults, parse_pattern, printable_usage, formal_usage
-from ._utils import _range, set_nargs
+from ._utils import _range, set_nargs, DictAttrWrap, typecast
 from ._version import __version__  # NOQA
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
@@ -90,7 +97,29 @@ def docopt_parser(doc='', **_kwargs):
     return once_args + qest_args + star_args + plus_args, opts
 
 
-def argopt(doc='', argparser=argparse.ArgumentParser, **_kwargs):
+class DocoptArgumentParser(object):
+    """Thin wrapper around docopt which behaves like argparse (for py26)
+    """
+    def __init__(self, doc, version=None):
+        self.doc = doc
+        self.version = version
+
+    def parse_args(self, args=None):
+        args = docopt(
+            self.doc, version=self.version,
+            argv=args if args is not None else sys.argv[1:])
+        for (k, v) in args.items():
+            try:
+                args[k] = typecast(v.rsplit(':', 1))
+            except:
+                pass
+        return DictAttrWrap(args)
+
+    def print_help(self, file=sys.stderr):
+        file.write(self.doc)
+
+
+def argopt(doc='', argparser=ArgumentParser, **_kwargs):
     """
     Note that `docopt` supports neither type specifiers nor default
     positional arguments. We support both here.
@@ -136,6 +165,9 @@ def argopt(doc='', argparser=argparse.ArgumentParser, **_kwargs):
     # TEST: option types
     # TEST: metavar
     # TEST: version
+
+    if argparser is None:
+        return DocoptArgumentParser(doc, version=_kwargs.get("version"))
 
     pu = printable_usage(doc)
     args, opts = docopt_parser(doc, **_kwargs)

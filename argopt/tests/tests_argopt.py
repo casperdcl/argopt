@@ -1,9 +1,14 @@
 from argopt import argopt
-import argparse
+try:
+    from argparse import RawDescriptionHelpFormatter
+except ImportError:
+    # py26
+    RawDescriptionHelpFormatter = None
 try:
     from StringIO import StringIO
 except ImportError:
     from io import StringIO
+import sys
 
 
 def test_basic():
@@ -23,9 +28,10 @@ Arguments:
     -p PAT, --patts PAT   Or [default: '':str].
     --bar=<b>             Another [default: something] should assume str.
     -f, --force           Force.
+    -v, --version         Print version and exit.
 '''
     parser = argopt(doc, version='0.1.2-3.4',
-                    formatter_class=argparse.RawDescriptionHelpFormatter)
+                    formatter_class=RawDescriptionHelpFormatter)
     fs = StringIO()
     parser.print_help(file=fs)
     res = fs.getvalue()
@@ -49,16 +55,19 @@ optional arguments:
   -p PAT, --patts PAT  Or [default: '':str].'''.split('\n'))
 
     except AssertionError:
-        raise AssertionError(res)
+        if not all([l.strip() in res for l in doc.split('\n')]):
+            raise AssertionError(res)
 
-    args = parser.parse_args(args=' such test much is'.split())
-    assert (args.x == 'such')
-    assert (args.x == 'such')
+    args = parser.parse_args(args='such test much is'.split())
+    try:
+        assert (args.x == 'such')
+    except AssertionError as e:
+        raise AssertionError("x:" + str(args.x) + str(e))
     assert (args.y == 'test much is'.split())
     try:
-        args = parser.parse_args(args=' -v'.split())
+        parser.parse_args(args=['-v'])
     except SystemExit as e:
-        assert(str(e) == '0')
+        assert(str(e) in ['0', ''])
     else:
         raise ValueError('System should have exited with code 0')
 
@@ -67,7 +76,7 @@ def test_verbose_and_version():
     doc = '''Usage:
     test.py [options]
 
-Arguments:
+Options:
     -v, --verbose   Not silent.
 '''
     parser = argopt(doc, version='4.3.2-1.0')
@@ -87,13 +96,13 @@ optional arguments:
     except AssertionError:
         raise AssertionError(res)
 
-    args = parser.parse_args(args=' -v'.split())
+    args = parser.parse_args(args=['-v'])
     assert args.verbose
     args = parser.parse_args(args=[])
     assert (not args.verbose)
     try:
-        args = parser.parse_args(args=' --version'.split())
+        parser.parse_args(args=['--version'])
     except SystemExit as e:
-        assert(str(e) == '0')
+        assert (str(e) in ['0', ''])
     else:
         raise ValueError('System should have exited with code 0')
