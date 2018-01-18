@@ -109,10 +109,8 @@ class DocoptArgumentParser(object):
             self.doc, version=self.version,
             argv=args if args is not None else sys.argv[1:])
         for (k, v) in args.items():
-            try:
-                args[k] = typecast(v.rsplit(':', 1))
-            except:
-                pass
+            if isinstance(v, str) and ':' in v:
+                args[k] = typecast(*v.rsplit(':', 1))
         return DictAttrWrap(args)
 
     def print_help(self, file=sys.stderr):
