@@ -5,6 +5,7 @@ import re
 from ._docopt import Argument, Option, AnyOptions, \
     parse_defaults, parse_pattern, printable_usage, formal_usage
 from ._utils import _range, set_nargs
+import logging
 from ._version import __version__  # NOQA
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
@@ -37,7 +38,10 @@ def docopt_parser(doc='', **_kwargs):
     """
     doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
+    log = logging.getLogger(__name__)
     options, args = parse_defaults(doc)
+    log.log(logging.NOTSET, "options:%r" % options)
+    log.log(logging.NOTSET, "args:%r" % args)
     usage = printable_usage(doc)
     pattern = parse_pattern(formal_usage(usage), options)
     # pattern_arguments = pattern.flat(Argument)
@@ -48,7 +52,16 @@ def docopt_parser(doc='', **_kwargs):
         ao.children = list(set_options - pattern_options)
 
     # args = pattern.flat(Argument)
-    opts = pattern.flat(Option)
+    opt_names = []
+    opts = []
+    for opt in pattern.flat(Option):
+        if not set([opt.short, opt.long]).intersection(opt_names):
+            opt_names.extend(filter(lambda x: x is not None,
+                                    [opt.short, opt.long]))
+            opts.append(opt)
+        else:
+            log.warn("dropped:%r" % opt)
+    log.log(logging.NOTSET, "opts:%r" % opts)
 
     if 'version' in _kwargs:
         if not any(o.name == '--version' for o in opts):
@@ -127,7 +140,7 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
     (docopt extension) action choices
     (docopt extension) action count
     """
-
+    log = logging.getLogger(__name__)
     # TODO:
     # TEST: prog name
     # TEST: prog description
@@ -148,7 +161,7 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
         **_kwargs)
 
     for a in args:
-        # debug('a', a.desc)
+        log.debug("a:%r" % a)
         k = {}
         if a.type is not None:
             k['type'] = a.type
@@ -159,7 +172,7 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
                             help=a.desc,
                             **k)
     for o in opts:
-        # debug(o)
+        log.debug("o:%r" % o)
         if o.name in ('-h', '--help'):
             continue
         if '--version' == o.name:
