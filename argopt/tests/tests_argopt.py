@@ -1,9 +1,5 @@
 from argopt import argopt
-try:
-    from argparse import RawDescriptionHelpFormatter
-except ImportError:
-    # py26
-    RawDescriptionHelpFormatter = None
+from argparse import RawDescriptionHelpFormatter
 try:
     from StringIO import StringIO
 except ImportError:
@@ -27,7 +23,6 @@ Arguments:
     -p PAT, --patts PAT   Or [default: '':str].
     --bar=<b>             Another [default: something] should assume str.
     -f, --force           Force.
-    -v, --version         Print version and exit.
 '''
     parser = argopt(doc, version='0.1.2-3.4',
                     formatter_class=RawDescriptionHelpFormatter)
@@ -54,8 +49,8 @@ optional arguments:
   -p PAT, --patts PAT  Or [default: '':str].'''.split('\n'))
 
     except AssertionError:
-        if not all([l.strip() in res for l in doc.split('\n')]):
-            raise AssertionError(res)
+        # if not all([l.strip() in res for l in doc.split('\n')]):
+        raise AssertionError(res)
 
     args = parser.parse_args(args='such test much is'.split())
     try:
@@ -66,7 +61,7 @@ optional arguments:
     try:
         parser.parse_args(args=['-v'])
     except SystemExit as e:
-        assert(str(e) in ['0', ''])
+        assert (str(e) == '0')
     else:
         raise ValueError('System should have exited with code 0')
 
@@ -102,6 +97,6 @@ optional arguments:
     try:
         parser.parse_args(args=['--version'])
     except SystemExit as e:
-        assert (str(e) in ['0', ''])
+        assert (str(e) == '0')
     else:
         raise ValueError('System should have exited with code 0')
