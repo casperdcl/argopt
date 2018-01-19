@@ -1,8 +1,8 @@
 from __future__ import print_function
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 import re
-from ._docopt import Argument, Option, AnyOptions, \
+from ._docopt import Argument, Option, AnyOptions, DocoptLanguageError, \
     parse_defaults, parse_pattern, printable_usage, formal_usage
 from ._utils import _range, set_nargs
 import logging
@@ -104,7 +104,8 @@ def docopt_parser(doc='', **_kwargs):
     return once_args + qest_args + star_args + plus_args, opts
 
 
-def argopt(doc='', argparser=ArgumentParser, **_kwargs):
+def argopt(doc='', argparser=ArgumentParser,
+           formatter_class=RawDescriptionHelpFormatter, **_kwargs):
     """
     Note that `docopt` supports neither type specifiers nor default
     positional arguments. We support both here.
@@ -112,11 +113,13 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
     Parameters
     ----------
     doc  : docopt compatible, with optional type specifiers
-         [default: '':str]
+        [default: '':str]
     argparser  : Argument parser class [default: argparse.ArgumentParser]
     version  : Version string [default: None:str]
+    formatter_class  : [default: argparse.RawDescriptionHelpFormatter]
     _kwargs  : any `argparser` initialiser arguments
-
+        N.B.: `prog`, `description`, and `epilog` are automatically
+        inferred if not `None`
 
     Returns
     -------
@@ -152,13 +155,27 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
     # TEST: version
 
     pu = printable_usage(doc)
+    log.debug(doc[:doc.find(pu)])
     args, opts = docopt_parser(doc, **_kwargs)
 
+    _kwargs.setdefault("prog", pu.split()[1])
+    _kwargs.setdefault("description", doc[:doc.find(pu)])
+    # epilogue
+    try:
+        pLast = printable_usage(doc, "arguments")
+    except DocoptLanguageError:
+        pLast = pu
+    try:
+        pOpts = printable_usage(doc, "options")
+    except DocoptLanguageError:
+        pLast = doc.find(pLast)
+    else:
+        pLast = max(doc.find(pLast), doc.find(pOpts))
+    _kwargs.setdefault("epilog",
+                       '\n\n'.join(doc[pLast:].split('\n\n')[1:]).strip())
+
     version = _kwargs.pop('version', None)
-    parser = argparser(
-        prog=pu.split()[1],
-        description=doc[:doc.find(pu)],
-        **_kwargs)
+    parser = argparser(formatter_class=formatter_class, **_kwargs)
 
     for a in args:
         log.debug("a:%r" % a)
