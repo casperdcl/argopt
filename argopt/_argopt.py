@@ -1,16 +1,11 @@
 from __future__ import print_function
-try:
-    from argparse import ArgumentParser
-except ImportError:
-    # py26
-    ArgumentParser = None
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 import re
-import sys
-from docopt import docopt  # only for py26
-from ._docopt import Argument, Option, AnyOptions, \
+from ._docopt import Argument, Option, AnyOptions, DocoptLanguageError, \
     parse_defaults, parse_pattern, printable_usage, formal_usage
-from ._utils import _range, set_nargs, DictAttrWrap, typecast
+from ._utils import _range, set_nargs
+import logging
 from ._version import __version__  # NOQA
 
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
@@ -39,11 +34,14 @@ def findall_args(re, pattern):
             for i in re.findall(pattern)]
 
 
-def docopt_parser(doc='', **_kwargs):
+def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     """
     doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
+    log = logging.getLogger(__name__)
     options, args = parse_defaults(doc)
+    log.log(logLevel, "options:%r" % options)
+    log.log(logLevel, "args:%r" % args)
     usage = printable_usage(doc)
     pattern = parse_pattern(formal_usage(usage), options)
     # pattern_arguments = pattern.flat(Argument)
@@ -54,7 +52,16 @@ def docopt_parser(doc='', **_kwargs):
         ao.children = list(set_options - pattern_options)
 
     # args = pattern.flat(Argument)
-    opts = pattern.flat(Option)
+    opt_names = []
+    opts = []
+    for opt in pattern.flat(Option):
+        if not set([opt.short, opt.long]).intersection(opt_names):
+            opt_names.extend(filter(lambda x: x is not None,
+                                    [opt.short, opt.long]))
+            opts.append(opt)
+        else:
+            log.warn("dropped:%r" % opt)
+    log.log(logLevel, "opts:%r" % opts)
 
     if 'version' in _kwargs:
         if not any(o.name == '--version' for o in opts):
@@ -97,29 +104,9 @@ def docopt_parser(doc='', **_kwargs):
     return once_args + qest_args + star_args + plus_args, opts
 
 
-class DocoptArgumentParser(object):
-    """Thin wrapper around docopt which behaves like argparse (for py26)
-    """
-    def __init__(self, doc, version=None):
-        self.doc = doc
-        self.version = version
-
-    def parse_args(self, args=None):
-        args = docopt(
-            self.doc, version=self.version,
-            argv=args if args is not None else sys.argv[1:])
-        for (k, v) in args.items():
-            try:
-                args[k] = typecast(v.rsplit(':', 1))
-            except:
-                pass
-        return DictAttrWrap(args)
-
-    def print_help(self, file=sys.stderr):
-        file.write(self.doc)
-
-
-def argopt(doc='', argparser=ArgumentParser, **_kwargs):
+def argopt(doc='', argparser=ArgumentParser,
+           formatter_class=RawDescriptionHelpFormatter,
+           logLevel=logging.NOTSET, **_kwargs):
     """
     Note that `docopt` supports neither type specifiers nor default
     positional arguments. We support both here.
@@ -127,11 +114,14 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
     Parameters
     ----------
     doc  : docopt compatible, with optional type specifiers
-         [default: '':str]
+        [default: '':str]
     argparser  : Argument parser class [default: argparse.ArgumentParser]
     version  : Version string [default: None:str]
+    formatter_class  : [default: argparse.RawDescriptionHelpFormatter]
+    logLevel  : [default: logging.NOTSET]
     _kwargs  : any `argparser` initialiser arguments
-
+        N.B.: `prog`, `description`, and `epilog` are automatically
+        inferred if not `None`
 
     Returns
     -------
@@ -155,7 +145,7 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
     (docopt extension) action choices
     (docopt extension) action count
     """
-
+    log = logging.getLogger(__name__)
     # TODO:
     # TEST: prog name
     # TEST: prog description
@@ -166,20 +156,33 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
     # TEST: metavar
     # TEST: version
 
-    if argparser is None:
-        return DocoptArgumentParser(doc, version=_kwargs.get("version"))
-
     pu = printable_usage(doc)
-    args, opts = docopt_parser(doc, **_kwargs)
+    log.log(logLevel, doc[:doc.find(pu)])
+    args, opts = docopt_parser(doc,
+                               log=max(logLevel - 10, logging.NOTSET),
+                               **_kwargs)
+
+    _kwargs.setdefault("prog", pu.split()[1])
+    _kwargs.setdefault("description", doc[:doc.find(pu)])
+    # epilogue
+    try:
+        pLast = printable_usage(doc, "arguments")
+    except DocoptLanguageError:
+        pLast = pu
+    try:
+        pOpts = printable_usage(doc, "options")
+    except DocoptLanguageError:
+        pLast = doc.find(pLast)
+    else:
+        pLast = max(doc.find(pLast), doc.find(pOpts))
+    _kwargs.setdefault("epilog",
+                       '\n\n'.join(doc[pLast:].split('\n\n')[1:]).strip())
 
     version = _kwargs.pop('version', None)
-    parser = argparser(
-        prog=pu.split()[1],
-        description=doc[:doc.find(pu)],
-        **_kwargs)
+    parser = argparser(formatter_class=formatter_class, **_kwargs)
 
     for a in args:
-        # debug('a', a.desc)
+        log.log(logLevel, "a:%r" % a)
         k = {}
         if a.type is not None:
             k['type'] = a.type
@@ -190,7 +193,7 @@ def argopt(doc='', argparser=ArgumentParser, **_kwargs):
                             help=a.desc,
                             **k)
     for o in opts:
-        # debug(o)
+        log.log(logLevel, "o:%r" % o)
         if o.name in ('-h', '--help'):
             continue
         if '--version' == o.name:

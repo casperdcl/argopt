@@ -184,7 +184,7 @@ setup(
     classifiers=[
         # Trove classifiers
         # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Environment :: MacOS X',
         'Environment :: Other Environment',
@@ -206,6 +206,7 @@ setup(
         'Operating System :: POSIX :: SunOS/Solaris',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
@@ -213,6 +214,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation',
         'Programming Language :: Python :: Implementation :: IronPython',
         'Programming Language :: Python :: Implementation :: PyPy',
@@ -238,5 +240,5 @@ setup(
              ' console terminal command line CLI UI gui gooey',
     test_suite='nose.collector',
     tests_require=['nose', 'flake8', 'coverage'],
-    requires=["docopt"] if sys.version_info[:2] == (2, 6) else [],
+    install_requires=["argparse"],
 )

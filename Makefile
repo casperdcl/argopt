@@ -82,6 +82,9 @@ clean:
 	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('argopt/*.py[co]')]"
 	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('examples/*.py[co]')]"
 	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('argopt/tests/*.py[co]')]"
+toxclean:
+	@+python -c "import shutil; shutil.rmtree('.tox', True)"
+
 
 installdev:
 	python setup.py develop --uninstall
