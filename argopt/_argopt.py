@@ -34,14 +34,14 @@ def findall_args(re, pattern):
             for i in re.findall(pattern)]
 
 
-def docopt_parser(doc='', **_kwargs):
+def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     """
     doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
     log = logging.getLogger(__name__)
     options, args = parse_defaults(doc)
-    log.log(logging.NOTSET, "options:%r" % options)
-    log.log(logging.NOTSET, "args:%r" % args)
+    log.log(logLevel, "options:%r" % options)
+    log.log(logLevel, "args:%r" % args)
     usage = printable_usage(doc)
     pattern = parse_pattern(formal_usage(usage), options)
     # pattern_arguments = pattern.flat(Argument)
@@ -61,7 +61,7 @@ def docopt_parser(doc='', **_kwargs):
             opts.append(opt)
         else:
             log.warn("dropped:%r" % opt)
-    log.log(logging.NOTSET, "opts:%r" % opts)
+    log.log(logLevel, "opts:%r" % opts)
 
     if 'version' in _kwargs:
         if not any(o.name == '--version' for o in opts):
@@ -105,7 +105,8 @@ def docopt_parser(doc='', **_kwargs):
 
 
 def argopt(doc='', argparser=ArgumentParser,
-           formatter_class=RawDescriptionHelpFormatter, **_kwargs):
+           formatter_class=RawDescriptionHelpFormatter,
+           logLevel=logging.NOTSET, **_kwargs):
     """
     Note that `docopt` supports neither type specifiers nor default
     positional arguments. We support both here.
@@ -117,6 +118,7 @@ def argopt(doc='', argparser=ArgumentParser,
     argparser  : Argument parser class [default: argparse.ArgumentParser]
     version  : Version string [default: None:str]
     formatter_class  : [default: argparse.RawDescriptionHelpFormatter]
+    logLevel  : [default: logging.NOTSET]
     _kwargs  : any `argparser` initialiser arguments
         N.B.: `prog`, `description`, and `epilog` are automatically
         inferred if not `None`
@@ -155,8 +157,10 @@ def argopt(doc='', argparser=ArgumentParser,
     # TEST: version
 
     pu = printable_usage(doc)
-    log.debug(doc[:doc.find(pu)])
-    args, opts = docopt_parser(doc, **_kwargs)
+    log.log(logLevel, doc[:doc.find(pu)])
+    args, opts = docopt_parser(doc,
+                               log=max(logLevel - 10, logging.NOTSET),
+                               **_kwargs)
 
     _kwargs.setdefault("prog", pu.split()[1])
     _kwargs.setdefault("description", doc[:doc.find(pu)])
@@ -178,7 +182,7 @@ def argopt(doc='', argparser=ArgumentParser,
     parser = argparser(formatter_class=formatter_class, **_kwargs)
 
     for a in args:
-        log.debug("a:%r" % a)
+        log.log(logLevel, "a:%r" % a)
         k = {}
         if a.type is not None:
             k['type'] = a.type
@@ -189,7 +193,7 @@ def argopt(doc='', argparser=ArgumentParser,
                             help=a.desc,
                             **k)
     for o in opts:
-        log.debug("o:%r" % o)
+        log.log(logLevel, "o:%r" % o)
         if o.name in ('-h', '--help'):
             continue
         if '--version' == o.name:
