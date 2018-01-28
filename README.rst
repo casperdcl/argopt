@@ -220,10 +220,10 @@ Authors
 
 .. |Build-Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
    :target: https://travis-ci.org/casperdcl/argopt
-.. |Coverage-Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg
-   :target: https://coveralls.io/r/casperdcl/argopt
-.. |Branch-Coverage-Status| image:: https://codecov.io/github/casperdcl/argopt/coverage.svg?branch=master
-   :target: https://codecov.io/github/casperdcl/argopt?branch=master
+.. |Coverage-Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg?branch=master
+   :target: https://coveralls.io/github/casperdcl/argopt
+.. |Branch-Coverage-Status| image:: https://codecov.io/gh/casperdcl/argopt/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/casperdcl/argopt
 .. |GitHub-Status| image:: https://img.shields.io/github/tag/casperdcl/argopt.svg?maxAge=2592000
    :target: https://github.com/casperdcl/argopt/releases
 .. |PyPI-Status| image:: https://img.shields.io/pypi/v/argopt.svg

@@ -43,10 +43,7 @@ all:
 	@+make build
 
 flake8:
-	@+flake8 --max-line-length=80 --count --statistics --exit-zero argopt/
-	@+flake8 --max-line-length=80 --count --statistics --exit-zero examples/
-	@+flake8 --max-line-length=80 --count --statistics --exit-zero .
-	@+flake8 --max-line-length=80 --count --statistics --exit-zero argopt/tests/
+	@+flake8 --max-line-length=80 --exclude .tox --count --statistics --exit-zero .
 
 test:
 	tox --skip-missing-interpreters

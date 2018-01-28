@@ -181,6 +181,7 @@ setup(
     bugtrack_url='https://github.com/casperdcl/argopt/issues',
     platforms=['any'],
     packages=['argopt'],
+    install_requires=['argparse'],
     classifiers=[
         # Trove classifiers
         # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)
@@ -240,5 +241,4 @@ setup(
              ' console terminal command line CLI UI gui gooey',
     test_suite='nose.collector',
     tests_require=['nose', 'flake8', 'coverage'],
-    install_requires=["argparse"],
 )
