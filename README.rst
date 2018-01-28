@@ -140,7 +140,9 @@ Documentation
 
 .. code:: python
 
-    def argopt(doc='', argparser=argparse.ArgumentParser, **_kwargs):
+    def argopt(doc='', argparser=ArgumentParser,
+               formatter_class=RawDescriptionHelpFormatter,
+               logLevel=logging.NOTSET, **_kwargs):
       """
       Note that `docopt` supports neither type specifiers nor default
       positional arguments. We support both here.
@@ -148,11 +150,14 @@ Documentation
       Parameters
       ----------
       doc  : docopt compatible, with optional type specifiers
-           [default: '':str]
+          [default: '':str]
       argparser  : Argument parser class [default: argparse.ArgumentParser]
       version  : Version string [default: None:str]
+      formatter_class  : [default: argparse.RawDescriptionHelpFormatter]
+      logLevel  : [default: logging.NOTSET]
       _kwargs  : any `argparser` initialiser arguments
-
+          N.B.: `prog`, `description`, and `epilog` are automatically
+          inferred if not `None`
 
       Returns
       -------
