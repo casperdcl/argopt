@@ -140,7 +140,9 @@ Documentation
 
 .. code:: python
 
-    def argopt(doc='', argparser=argparse.ArgumentParser, **_kwargs):
+    def argopt(doc='', argparser=ArgumentParser,
+               formatter_class=RawDescriptionHelpFormatter,
+               logLevel=logging.NOTSET, **_kwargs):
       """
       Note that `docopt` supports neither type specifiers nor default
       positional arguments. We support both here.
@@ -148,11 +150,14 @@ Documentation
       Parameters
       ----------
       doc  : docopt compatible, with optional type specifiers
-           [default: '':str]
+          [default: '':str]
       argparser  : Argument parser class [default: argparse.ArgumentParser]
       version  : Version string [default: None:str]
+      formatter_class  : [default: argparse.RawDescriptionHelpFormatter]
+      logLevel  : [default: logging.NOTSET]
       _kwargs  : any `argparser` initialiser arguments
-
+          N.B.: `prog`, `description`, and `epilog` are automatically
+          inferred if not `None`
 
       Returns
       -------
@@ -220,10 +225,10 @@ Authors
 
 .. |Build-Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
    :target: https://travis-ci.org/casperdcl/argopt
-.. |Coverage-Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg
-   :target: https://coveralls.io/r/casperdcl/argopt
-.. |Branch-Coverage-Status| image:: https://codecov.io/github/casperdcl/argopt/coverage.svg?branch=master
-   :target: https://codecov.io/github/casperdcl/argopt?branch=master
+.. |Coverage-Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg?branch=master
+   :target: https://coveralls.io/github/casperdcl/argopt
+.. |Branch-Coverage-Status| image:: https://codecov.io/gh/casperdcl/argopt/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/casperdcl/argopt
 .. |GitHub-Status| image:: https://img.shields.io/github/tag/casperdcl/argopt.svg?maxAge=2592000
    :target: https://github.com/casperdcl/argopt/releases
 .. |PyPI-Status| image:: https://img.shields.io/pypi/v/argopt.svg
