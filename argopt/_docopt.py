@@ -10,7 +10,6 @@
 import re
 from ._utils import typecast
 
-
 __version__ = '0.6.2-casper.3'
 
 
@@ -448,7 +447,8 @@ def parse_atom(tokens, options):
 def parse_defaults(doc):
     # in python < 2.7 you can't pass flags=re.MULTILINE
     split = re.split('\n *(<\S+?>|-\S+?)', doc)[1:]
-    split = [s1 + s2 for s1, s2 in zip(split[::2], split[1::2])]
+    split = [s1 + s2.split('\n\n')[0]
+             for s1, s2 in zip(split[::2], split[1::2])]
     options = [Option.parse(s) for s in split if s.startswith('-')]
     arguments = [Argument.parse(s) for s in split if s.startswith('<')]
     return options, arguments
