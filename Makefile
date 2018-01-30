@@ -33,6 +33,9 @@
 	pypi
 	none
 
+help:
+	@python setup.py make
+
 alltests:
 	@+make testcoverage
 	@+make flake8
@@ -75,10 +78,10 @@ coverclean:
 	@+python -c "import shutil; shutil.rmtree('argopt/__pycache__', True)"
 	@+python -c "import shutil; shutil.rmtree('argopt/tests/__pycache__', True)"
 clean:
-	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('*.py[co]')]"
-	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('argopt/*.py[co]')]"
-	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('examples/*.py[co]')]"
-	@+python -c "import os; import glob; [os.remove(i) for i in glob.glob('argopt/tests/*.py[co]')]"
+	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('*.py[co]')]"
+	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('argopt/*.py[co]')]"
+	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('examples/*.py[co]')]"
+	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('argopt/tests/*.py[co]')]"
 toxclean:
 	@+python -c "import shutil; shutil.rmtree('.tox', True)"
 
