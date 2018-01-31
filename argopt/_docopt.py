@@ -455,15 +455,25 @@ def parse_defaults(doc):
 
 
 def printable_usage(doc, section="usage"):
-    # in python < 2.7 you can't pass flags=re.IGNORECASE
+    # in python < 2.7 you can't pass flags=re.IGNORECASE|re.MULTILINE
     regex = ''.join(["[%s%s]" % (i.lower(), i.upper()) for i in section])
+    # usage_split = re.split('^(' + regex + ':)', doc, flags=re.M)
     usage_split = re.split('(' + regex + ':)', doc)
-    if len(usage_split) < 3:
+    # indices of real sections (preceded by newline or blank)
+    secs = [i + 1 for i in range(0, len(usage_split) - 1, 2) if
+            usage_split[i].endswith('\n') or not
+            usage_split[i].strip()]
+    if len(secs) == 0:
         raise DocoptLanguageError(
             '"%s:" (case-insensitive) not found.' % section)
-    if len(usage_split) > 3:
+    elif len(secs) > 1:
         raise DocoptLanguageError(
             'More than one "%s:" (case-insensitive).' % section)
+    # ignore fake sections
+    s = secs[0]
+    usage_split = [''.join(usage_split[i]) for i in
+                   [slice(0, s), s, slice(s + 1, None)]]
+
     return re.split(r'\n\s*\n', ''.join(usage_split[1:]))[0].strip()
 
 
