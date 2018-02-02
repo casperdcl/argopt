@@ -181,6 +181,7 @@ setup(
     platforms=['any'],
     packages=['argopt'],
     install_requires=['argparse'],
+    package_data={'': ['LICENCE']},
     classifiers=[
         # Trove classifiers
         # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)

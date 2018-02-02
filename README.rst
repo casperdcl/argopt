@@ -1,7 +1,7 @@
 argopt
 ======
 
-doc to argparse driven by docopt
+doc to ``argparse`` driven by ``docopt``
 
 |PyPI-Status| |PyPI-Versions|
 
@@ -29,7 +29,7 @@ The problem is that this is not always flexible. Still need all the features of
 Installation
 ------------
 
-Latest pypi stable release
+Latest PyPI stable release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 |PyPI-Status|
@@ -208,7 +208,7 @@ Licence
 
 Open Source (OSI approved): |LICENCE|
 
-Copyright (c) 2016-7 Casper da Costa-Luis.
+Copyright (c) 2016-8 Casper da Costa-Luis.
 
 This Source Code Form is subject to the terms of the
 Mozilla Public License, v. 2.0.
@@ -223,6 +223,8 @@ Authors
 
 - Casper da Costa-Luis (`@casperdcl <https://github.com/casperdcl/>`__) |Donate|
 
+|argopt-hits|
+
 .. |Build-Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
    :target: https://travis-ci.org/casperdcl/argopt
 .. |Coverage-Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg?branch=master
@@ -235,6 +237,7 @@ Authors
    :target: https://pypi.python.org/pypi/argopt
 .. |PyPI-Versions| image:: https://img.shields.io/pypi/pyversions/argopt.svg
    :target: https://pypi.python.org/pypi/argopt
+.. |argopt-hits| image:: https://caspersci.uk.to/cgi-bin/hits.cgi?q=argopt&a=hidden
 .. |OpenHub-Status| image:: https://www.openhub.net/p/arg-opt/widgets/project_thin_badge?format=gif
    :target: https://www.openhub.net/p/arg-opt?ref=Thin+badge
 .. |LICENCE| image:: https://img.shields.io/pypi/l/argopt.svg
