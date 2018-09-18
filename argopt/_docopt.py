@@ -170,6 +170,11 @@ class Argument(ChildPattern):
         value = matched[0] if matched else None
         return class_(name, value, description)
 
+    @property
+    def name_stripped(self):
+        return self.name[1:-1] \
+            if self.name[0] == '<' and self.name[-1] == '>' else self.name
+
 
 class Command(Argument):
     def __init__(self, name, value=False):
@@ -444,13 +449,36 @@ def parse_atom(tokens, options):
         return [Command(tokens.move())]
 
 
+def get_indent(doc, optargs=False):
+    """Returns indent level for options/arguments"""
+    if optargs:  # just Options and Arguments sections
+        try:
+            lines = printable_usage(doc, "arguments").split('\n')
+        except DocoptLanguageError:
+            lines = []
+        try:
+            lines += printable_usage(doc, "options").split('\n')
+        except DocoptLanguageError:
+            pass
+    else:
+        lines = doc.split('\n')
+    indents = [len(l) - len(l.lstrip()) for l in lines]
+    return ' ' * (min([i for i in indents if i]) if indents else 0)
+
+
 def parse_defaults(doc):
     # in python < 2.7 you can't pass flags=re.MULTILINE
-    split = re.split('\n *(<\S+?>|-\S+?)', doc)[1:]
+    ind = get_indent(doc, optargs=True)
+    if not ind:
+        return [], []
+    #split = re.split('\n (<\S+?>|-\S+?)', doc)[1:]
+    split = re.split('\n' + ind + '(<\S+?>|[A-Z0-9_]+|-\S+)', doc)[1:]
+    #print ">>>>>", split, "<<<<<<"
+    # strip next sections from descriptions
     split = [s1 + s2.split('\n\n')[0]
              for s1, s2 in zip(split[::2], split[1::2])]
     options = [Option.parse(s) for s in split if s.startswith('-')]
-    arguments = [Argument.parse(s) for s in split if s.startswith('<')]
+    arguments = [Argument.parse(s) for s in split if not s.startswith('-')]
     return options, arguments
 
 
