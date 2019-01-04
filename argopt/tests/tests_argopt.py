@@ -15,7 +15,7 @@ instead of
     args = docopt(__doc__)
 
 Usage:
-    test.py [-h | options] <x> [<y>...]
+    test.py [-h | options] <x> Y [<z>...]
 
 Arguments:
     <x>                   A file.
@@ -38,7 +38,8 @@ instead of
     args = docopt(__doc__)''' in res)
         assert (i in res for i in '''positional arguments:
   x                    A file.
-  y
+  Y
+  z
 
 optional arguments:
   -h, --help           show this help message and exit
@@ -57,7 +58,8 @@ optional arguments:
         assert (args.x == 'such')
     except AssertionError as e:
         raise AssertionError("x:" + str(args.x) + str(e))
-    assert (args.y == 'test much is'.split())
+    assert (args.Y == 'test')
+    assert (args.z == 'much is'.split())
     try:
         parser.parse_args(args=['-v'])
     except SystemExit as e:

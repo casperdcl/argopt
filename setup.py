@@ -180,7 +180,7 @@ setup(
     bugtrack_url='https://github.com/casperdcl/argopt/issues',
     platforms=['any'],
     packages=['argopt'],
-    install_requires=['argparse'],
+    install_requires=['argparse'] if sys.version_info[:2] < (2, 7) else [],
     package_data={'': ['LICENCE']},
     classifiers=[
         # Trove classifiers

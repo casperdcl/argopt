@@ -17,12 +17,12 @@ __license__ = __licence__  # weird foreign language
 
 
 RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()"
-                         "Argument\('(<\S+?>)', (\S+?), (\S+?)\)")
+                         "Argument\('(\S+?)', (\S+?), (\S+?)\)")
 RE_ARG_STAR = re.compile(r"Optional\(OneOrMore\(Argument\("
-                         "'(<\S+?>)', (\S+?), (\S+?)\)\)\)")
+                         "'(\S+?)', (\S+?), (\S+?)\)\)\)")
 RE_ARG_PLUS = re.compile(r"(?<!Optional\()"
-                         "OneOrMore\(Argument\('(<\S+?>)', (\S+?), (\S+?)\)\)")
-RE_ARG_QEST = re.compile(r"Optional\(Argument\('(<\S+?>)', (\S+?), (\S+?)\)\)")
+                         "OneOrMore\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
+RE_ARG_QEST = re.compile(r"Optional\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
 
 
 def findall_args(re, pattern):
@@ -159,9 +159,8 @@ def argopt(doc='', argparser=ArgumentParser,
     pu = printable_usage(doc)
     log.log(logLevel, doc[:doc.find(pu)])
     args, opts = docopt_parser(doc,
-                               log=max(logLevel - 10, logging.NOTSET),
+                               logLevel=max(logLevel - 10, logging.NOTSET),
                                **_kwargs)
-
     _kwargs.setdefault("prog", pu.split()[1])
     _kwargs.setdefault("description", doc[:doc.find(pu)])
     # epilogue
@@ -188,10 +187,7 @@ def argopt(doc='', argparser=ArgumentParser,
             k['type'] = a.type
         if a.value is not None:
             k['default'] = a.value
-        parser.add_argument(a.name[1:-1],  # strip out encompassing '<>'
-                            nargs=a.nargs,
-                            help=a.desc,
-                            **k)
+        parser.add_argument(a.name_stripped, nargs=a.nargs, help=a.desc, **k)
     for o in opts:
         log.log(logLevel, "o:%r" % o)
         if o.name in ('-h', '--help'):
