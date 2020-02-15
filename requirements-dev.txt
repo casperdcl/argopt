@@ -1,0 +1,2 @@
+py-make>=0.1.0  # setup.py make/pymake
+twine           # pymake pypi

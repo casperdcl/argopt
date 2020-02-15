@@ -17,11 +17,11 @@ __license__ = __licence__  # weird foreign language
 
 
 RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()"
-                         "Argument\('(\S+?)', (\S+?), (\S+?)\)")
+                         r"Argument\('(\S+?)', (\S+?), (\S+?)\)")
 RE_ARG_STAR = re.compile(r"Optional\(OneOrMore\(Argument\("
-                         "'(\S+?)', (\S+?), (\S+?)\)\)\)")
+                         r"'(\S+?)', (\S+?), (\S+?)\)\)\)")
 RE_ARG_PLUS = re.compile(r"(?<!Optional\()"
-                         "OneOrMore\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
+                         r"OneOrMore\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
 RE_ARG_QEST = re.compile(r"Optional\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
 
 
