@@ -166,7 +166,7 @@ class Argument(ChildPattern):
     @classmethod
     def parse(class_, argument_description):
         name, _, description = argument_description.strip().partition('  ')
-        matched = re.findall('\[default: (.*)\]', description, flags=re.I)
+        matched = re.findall(r'\[default: (.*)\]', description, flags=re.I)
         value = matched[0] if matched else None
         return class_(name, value, description)
 
@@ -226,7 +226,7 @@ class Option(ChildPattern):
                 meta = s[1:-1] if s.startswith('<') and s.endswith('>') else s
                 argcount = 1
         if argcount:
-            matched = re.findall('\[default: (.*)\]', description, flags=re.I)
+            matched = re.findall(r'\[default: (.*)\]', description, flags=re.I)
             value = matched[0] if matched else None
         return class_(short, long, argcount, value, description, meta)
 
@@ -254,7 +254,7 @@ class Option(ChildPattern):
 class Required(ParentPattern):
     def match(self, left, collected=None):
         collected = [] if collected is None else collected
-        l = left
+        l = left  # NOQA
         c = collected
         for p in self.children:
             matched, l, c = p.match(l, c)
@@ -279,7 +279,7 @@ class OneOrMore(ParentPattern):
     def match(self, left, collected=None):
         assert len(self.children) == 1
         collected = [] if collected is None else collected
-        l = left
+        l = left  # NOQA
         c = collected
         l_ = None
         matched = True
@@ -471,9 +471,8 @@ def parse_defaults(doc):
     ind = get_indent(doc, optargs=True)
     if not ind:
         return [], []
-    #split = re.split('\n (<\S+?>|-\S+?)', doc)[1:]
-    split = re.split('\n' + ind + '(<\S+?>|[A-Z0-9_]+|-\S+)', doc)[1:]
-    #print ">>>>>", split, "<<<<<<"
+    # TODO: split = re.split('\n (<\S+?>|-\S+?)', doc)[1:]
+    split = re.split('\n' + ind + r'(<\S+?>|[A-Z0-9_]+|-\S+)', doc)[1:]
     # strip next sections from descriptions
     split = [s1 + s2.split('\n\n')[0]
              for s1, s2 in zip(split[::2], split[1::2])]

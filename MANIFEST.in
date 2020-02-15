@@ -6,6 +6,7 @@ include tox.ini
 
 # Test suite
 recursive-include argopt/tests *.py
+include requirements-dev.txt
 
 # Examples/Documentation
 recursive-include examples *.py

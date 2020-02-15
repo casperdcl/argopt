@@ -50,7 +50,7 @@ def main():
                 (os.path.dirname(__file__), __file__))
         raise
     args = parser.parse_args()
-    print (args)
+    print(args)
 
 
 if __name__ == '__main__':

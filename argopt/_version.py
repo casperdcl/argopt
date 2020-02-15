@@ -25,7 +25,7 @@ if (_sh is not None) and (len(version_info) < 4):  # pragma: no cover
             res = _sh('git', 'log', '-n', '1', '--oneline', *args,
                       stderr=STDOUT).lstrip().split()[0]
             return None if res.startswith('fatal') else res
-        except:
+        except:  # NOQA
             return None
 
     cur_hash = commit_hash()
