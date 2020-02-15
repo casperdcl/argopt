@@ -26,15 +26,16 @@
 	coverclean
 	prebuildclean
 	clean
+	toxclean
 	installdev
 	install
 	build
-	pypimeta
+	buildupload
 	pypi
 	none
 
 help:
-	@python setup.py make
+	@python setup.py make -p
 
 alltests:
 	@+make testcoverage
@@ -46,16 +47,16 @@ all:
 	@+make build
 
 flake8:
-	@+flake8 --max-line-length=80 --exclude .tox --count --statistics --exit-zero .
+	@+flake8 -j 8 --count --statistics --exit-zero .
 
 test:
-	tox --skip-missing-interpreters
+	tox --skip-missing-interpreters -p all
 
 testnose:
 	nosetests argopt -d -v
 
 testsetup:
-	python setup.py check --restructuredtext --strict
+	python setup.py check --metadata --restructuredtext --strict
 	python setup.py make none
 
 testcoverage:
@@ -95,19 +96,15 @@ install:
 
 build:
 	@make prebuildclean
-	python setup.py sdist --formats=gztar,zip bdist_wheel
-	python setup.py bdist_wininst
-
-pypimeta:
-	python setup.py register
+	@make testsetup
+	python setup.py sdist bdist_wheel
+	# python setup.py bdist_wininst
 
 pypi:
 	twine upload dist/*
 
 buildupload:
-	@make testsetup
 	@make build
-	@make pypimeta
 	@make pypi
 
 none:

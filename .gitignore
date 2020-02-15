@@ -1,5 +1,4 @@
-argopt/*.py[co]
-argopt/tests/*.py[co]
+*.py[co]
 # build
 argopt.egg-info/
 build/
