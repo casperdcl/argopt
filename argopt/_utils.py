@@ -11,6 +11,7 @@ try:  # pragma: no cover
     _range = xrange
 except NameError:  # pragma: no cover
     _range = range
+    file = open
 
 
 class DictAttrWrap(object):

@@ -9,6 +9,10 @@
 """
 import re
 from ._utils import typecast
+try:
+    from ._utils import file
+except ImportError:
+    pass
 
 __version__ = '0.6.2-casper.3'
 
