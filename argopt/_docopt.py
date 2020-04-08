@@ -9,8 +9,12 @@
 """
 import re
 from ._utils import typecast
+try:
+    from ._utils import file  # NOQA
+except ImportError:
+    pass
 
-__version__ = '0.6.2-casper.3'
+__version__ = '0.6.2-casper.4'
 
 
 class DocoptLanguageError(Exception):
