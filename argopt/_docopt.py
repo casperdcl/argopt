@@ -10,7 +10,7 @@
 import re
 from ._utils import typecast
 try:
-    from ._utils import file
+    from ._utils import file  # NOQA
 except ImportError:
     pass
 

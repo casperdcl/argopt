@@ -74,7 +74,7 @@ distclean:
 pre-commit:
 	# quick sanity checks
 	@make testsetup
-	@make flake8
+	@flake8 -j 8 --count --statistics .
 	@make testnose
 prebuildclean:
 	@+python -c "import shutil; shutil.rmtree('build', True)"
