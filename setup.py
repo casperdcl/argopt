@@ -13,9 +13,9 @@ __licence__ = None
 __version__ = None
 src_dir = os.path.abspath(os.path.dirname(__file__))
 main_file = os.path.join(src_dir, 'argopt', '_argopt.py')
-for l in io_open(main_file, mode='r'):
-    if any(l.startswith(i) for i in ('__author__', '__licence__')):
-        exec(l)
+for line in io_open(main_file, mode='r'):
+    if any(line.startswith(i) for i in ('__author__', '__licence__')):
+        exec(line)
 version_file = os.path.join(src_dir, 'argopt', '_version.py')
 with io_open(version_file, mode='r') as fd:
     exec(fd.read())

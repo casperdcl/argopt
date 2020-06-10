@@ -466,7 +466,7 @@ def get_indent(doc, optargs=False):
             pass
     else:
         lines = doc.split('\n')
-    indents = [len(l) - len(l.lstrip()) for l in lines]
+    indents = [len(i) - len(i.lstrip()) for i in lines]
     return ' ' * (min([i for i in indents if i]) if indents else 0)
 
 
