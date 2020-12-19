@@ -24,7 +24,6 @@
 	testtimer
 	distclean
 	coverclean
-	pre-commit
 	prebuildclean
 	clean
 	toxclean
@@ -71,15 +70,12 @@ distclean:
 	@+make coverclean
 	@+make prebuildclean
 	@+make clean
-pre-commit:
-	# quick sanity checks
-	@make testsetup
-	@flake8 -j 8 --count --statistics .
-	@make testnose
 prebuildclean:
 	@+python -c "import shutil; shutil.rmtree('build', True)"
 	@+python -c "import shutil; shutil.rmtree('dist', True)"
 	@+python -c "import shutil; shutil.rmtree('argopt.egg-info', True)"
+	@+python -c "import shutil; shutil.rmtree('.eggs', True)"
+	@+python -c "import os; os.remove('argopt/_dist_ver.py') if os.path.exists('argopt/_dist_ver.py') else None"
 coverclean:
 	@+python -c "import os; os.remove('.coverage') if os.path.exists('.coverage') else None"
 	@+python -c "import shutil; shutil.rmtree('argopt/__pycache__', True)"

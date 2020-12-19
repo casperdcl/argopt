@@ -1,0 +1,136 @@
+name: Test
+on:
+  push:
+  pull_request:
+  schedule:
+  - cron: '3 2 1 * *'  # M H d m w (monthly at 2:03)
+jobs:
+  check:
+    if: github.event_name != 'pull_request' || github.head_ref != 'devel'
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: set PYSHA
+      run: echo "PYSHA=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit|${{ env.PYSHA }}|${{ hashFiles('.pre-commit-config.yaml') }}
+    - name: Test
+      run: |
+        pip install -U tox
+        tox -e setup.py
+    - name: Self install
+      run: pip install -U .[dev]
+    - name: Build
+      run: |
+        python setup.py sdist bdist_wheel
+        twine check dist/*
+    - uses: reviewdog/action-setup@v1
+    - if: github.event_name != 'schedule'
+      name: flake8
+      run: |
+        pre-commit run -a flake8 | reviewdog -f=pep8 -name=Format -tee -reporter=github-check -filter-mode nofilter
+      env:
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Lint
+      run: pre-commit run -a --show-diff-on-failure
+  test:
+    if: github.event_name != 'pull_request' || github.head_ref != 'devel'
+    strategy:
+      matrix:
+        python: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9, pypy3]
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
+    - name: Install
+      run: pip install -U tox
+    - name: Test
+      run: |
+        if [[ "$PYVER" == py* ]]; then
+          tox -e $PYVER                                             # basic:pypy
+        else
+          tox -e py${PYVER/./}                                      # normal
+        fi
+      env:
+        PYVER: ${{ matrix.python }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - name: Coveralls Parallel
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        parallel: true
+  finish:
+    if: github.event_name != 'pull_request' || github.head_ref != 'devel'
+    name: Coverage
+    continue-on-error: ${{ github.event_name != 'push' }}
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        parallel-finished: true
+  deploy:
+    if: github.event_name != 'pull_request' || github.head_ref != 'devel'
+    name: Deploy
+    needs: [check, test]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      uses: casperdcl/deploy-pypi@v1
+      with:
+        build: true
+        gpg_key: ${{ secrets.GPG_KEY }}
+        password: ${{ secrets.PYPI_TOKEN }}
+        skip_existing: true
+    - id: collect_assets
+      name: Collect assets
+      run: |
+        echo "::set-output name=asset_path::$(ls dist/*.whl)"
+        echo "::set-output name=asset_name::$(basename dist/*.whl)"
+        echo "::set-output name=asset_path_sig::$(ls dist/*.whl.asc 2>/dev/null)"
+        echo "::set-output name=asset_name_sig::$(basename dist/*.whl.asc 2>/dev/null)"
+        git log --pretty='format:%d%n- %s%n%b---' $(git tag --sort=v:refname | tail -n2 | head -n1)..HEAD > _CHANGES.md
+    - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: argopt ${{ github.ref }} stable
+        body_path: _CHANGES.md
+        draft: true
+    - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.collect_assets.outputs.asset_path }}
+        asset_name: ${{ steps.collect_assets.outputs.asset_name }}
+        asset_content_type: application/zip
+    - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.collect_assets.outputs.asset_path_sig }}
+        asset_name: ${{ steps.collect_assets.outputs.asset_name_sig }}
+        asset_content_type: text/plain

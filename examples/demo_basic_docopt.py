@@ -17,8 +17,10 @@ Arguments:
     -h, --help            Show this help message and exit.
     -v, --version         Show program's version number and exit.
 """
-from docopt import docopt
 from ast import literal_eval
+
+from docopt import docopt
+
 __version__ = "0.1.2-3.4"
 
 

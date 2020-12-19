@@ -17,10 +17,10 @@ Arguments:
     -f, --force           Force.
     --ignore-gooey
 """
-from argopt import argopt
-import sys
 import os
+import sys
 
+from argopt import argopt
 
 if '--with-gooey' in sys.argv:
     from gooey import Gooey

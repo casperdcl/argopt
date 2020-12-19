@@ -1,19 +1,36 @@
 from __future__ import print_function
+
+import logging
+import re
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
-import re
-from ._docopt import Argument, Option, AnyOptions, DocoptLanguageError, \
-    parse_defaults, parse_pattern, printable_usage, formal_usage
+from ._docopt import (
+    AnyOptions,
+    Argument,
+    DocoptLanguageError,
+    Option,
+    formal_usage,
+    parse_defaults,
+    parse_pattern,
+    printable_usage,
+)
 from ._utils import _range, set_nargs
-import logging
-from ._version import __version__  # NOQA
 
+# version detector. Precedence: installed dist, git, 'UNKNOWN'
+try:
+    from ._dist_ver import __version__
+except ImportError:
+    try:
+        from setuptools_scm import get_version
+        __version__ = get_version(root='..', relative_to=__file__)
+    except (ImportError, LookupError):
+        __version__ = "UNKNOWN"
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
-__date__ = "2016-7"
-__licence__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
-__all__ = ["argopt"]
+__date__ = "2016-2020"
+__licence__ = __license__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
 __copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
-__license__ = __licence__  # weird foreign language
+
+log = logging.getLogger(__name__)
 
 
 RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()"
@@ -38,7 +55,6 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     """
     doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
-    log = logging.getLogger(__name__)
     options, args = parse_defaults(doc)
     log.log(logLevel, "options:%r" % options)
     log.log(logLevel, "args:%r" % args)
@@ -145,7 +161,6 @@ def argopt(doc='', argparser=ArgumentParser,
     (docopt extension) action choices
     (docopt extension) action count
     """
-    log = logging.getLogger(__name__)
     # TODO:
     # TEST: prog name
     # TEST: prog description

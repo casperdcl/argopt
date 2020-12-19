@@ -3,11 +3,11 @@ argopt
 
 doc to ``argparse`` driven by ``docopt``
 
-|PyPI-Status| |PyPI-Versions|
+|Py-Versions| |PyPI| |Conda-Forge|
 
-|Build-Status| |Coverage-Status| |Branch-Coverage-Status| |Codacy-Grade|
+|Build-Status| |Coverage-Status| |Branch-Coverage-Status| |Codacy-Grade| |Libraries-Rank| |PyPI-Downloads|
 
-|LICENCE| |Donate| |OpenHub-Status|
+|LICENCE| |OpenHub-Status| |Gift-Casper|
 
 Define your command line interface (CLI) from a docstring (rather than the
 other way around). Because it's easy. It's quick. Painless. Then focus on
@@ -32,31 +32,37 @@ Installation
 Latest PyPI stable release
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-|PyPI-Status|
+|PyPI| |PyPI-Downloads| |Libraries-Dependents|
 
 .. code:: sh
 
     pip install argopt
 
-Latest development release on github
+Latest development release on GitHub
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-|GitHub-Status|
+|GitHub-Status| |GitHub-Stars| |GitHub-Commits| |GitHub-Forks| |GitHub-Updated|
 
-Pull and install in the current directory:
+Pull and install:
 
 .. code:: sh
 
-    pip install -e git+https://github.com/casperdcl/argopt.git@master#egg=argopt
+    pip install "git+https://github.com/casperdcl/argopt.git@master#egg=argopt"
+
+Latest Conda release
+~~~~~~~~~~~~~~~~~~~~
+
+|Conda-Forge|
+
+.. code:: sh
+
+    conda install -c conda-forge argopt
 
 
 Changelog
 ---------
 
-The list of all changes is available either on
-`Github's Releases <https://github.com/casperdcl/argopt/releases>`__
-or on crawlers such as
-`allmychanges.com <https://allmychanges.com/p/python/argopt/>`__.
+The list of all changes is available on the Releases page: |GitHub-Status|.
 
 
 Usage
@@ -138,6 +144,8 @@ folder.
 Documentation
 -------------
 
+|Py-Versions| |README-Hits|
+
 .. code:: python
 
     def argopt(doc='', argparser=ArgumentParser,
@@ -186,34 +194,16 @@ Documentation
 Contributions
 -------------
 
-To run the testing suite please make sure tox (https://testrun.org/tox/latest/)
-is installed, then type ``tox`` from the command line.
+|GitHub-Commits| |GitHub-Issues| |GitHub-PRs| |OpenHub-Status|
 
-Where ``tox`` is unavailable, a Makefile-like setup is
-provided with the following command:
-
-.. code:: sh
-
-    $ python setup.py make alltests
-
-To see all options, run:
-
-.. code:: sh
-
-    $ python setup.py make
+All source code is hosted on `GitHub <https://github.com/casperdcl/argopt>`__.
+Contributions are welcome.
 
 
-Licence
+LICENCE
 -------
 
 Open Source (OSI approved): |LICENCE|
-
-Copyright (c) 2016-8 Casper da Costa-Luis.
-
-This Source Code Form is subject to the terms of the
-Mozilla Public License, v. 2.0.
-If a copy of the MPL was not distributed with this file, You can obtain one
-at `https://mozilla.org/MPL/2.0/ <https://mozilla.org/MPL/2.0/>`__.
 
 
 Authors
@@ -221,28 +211,53 @@ Authors
 
 |OpenHub-Status|
 
-- Casper da Costa-Luis (`@casperdcl <https://github.com/casperdcl/>`__) |Donate|
+- Casper da Costa-Luis (`casperdcl <https://github.com/casperdcl>`__ |Gift-Casper|)
 
-|argopt-hits|
+We are grateful for all |GitHub-Contributions|.
 
-.. |Build-Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
-   :target: https://travis-ci.org/casperdcl/argopt
-.. |Coverage-Status| image:: https://coveralls.io/repos/casperdcl/argopt/badge.svg?branch=master
+|README-Hits|
+
+.. |Build-Status| image:: https://img.shields.io/github/workflow/status/casperdcl/argopt/Test/master?logo=GitHub
+   :target: https://github.com/casperdcl/argopt/actions?query=workflow%3ATest
+.. |Coverage-Status| image:: https://img.shields.io/coveralls/github/casperdcl/argopt/master?logo=coveralls
    :target: https://coveralls.io/github/casperdcl/argopt
 .. |Branch-Coverage-Status| image:: https://codecov.io/gh/casperdcl/argopt/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/casperdcl/argopt
-.. |GitHub-Status| image:: https://img.shields.io/github/tag/casperdcl/argopt.svg?maxAge=2592000
+.. |Codacy-Grade| image:: https://api.codacy.com/project/badge/Grade/5282d52c142d4c6ea24f978b03981c6f
+   :target: https://app.codacy.com/gh/casperdcl/argopt
+.. |GitHub-Status| image:: https://img.shields.io/github/tag/casperdcl/argopt.svg?maxAge=86400&logo=github
    :target: https://github.com/casperdcl/argopt/releases
-.. |PyPI-Status| image:: https://img.shields.io/pypi/v/argopt.svg
-   :target: https://pypi.python.org/pypi/argopt
-.. |PyPI-Versions| image:: https://img.shields.io/pypi/pyversions/argopt.svg
-   :target: https://pypi.python.org/pypi/argopt
-.. |argopt-hits| image:: https://caspersci.uk.to/cgi-bin/hits.cgi?q=argopt&a=hidden
+.. |GitHub-Forks| image:: https://img.shields.io/github/forks/casperdcl/argopt.svg?logo=github
+   :target: https://github.com/casperdcl/argopt/network
+.. |GitHub-Stars| image:: https://img.shields.io/github/stars/casperdcl/argopt.svg?logo=github
+   :target: https://github.com/casperdcl/argopt/stargazers
+.. |GitHub-Commits| image:: https://img.shields.io/github/commit-activity/y/casperdcl/argopt?label=commits&logo=git
+   :target: https://github.com/casperdcl/argopt/graphs/commit-activity
+.. |GitHub-Issues| image:: https://img.shields.io/github/issues-closed/casperdcl/argopt.svg?logo=github
+   :target: https://github.com/casperdcl/argopt/issues
+.. |GitHub-PRs| image:: https://img.shields.io/github/issues-pr-closed/casperdcl/argopt.svg?logo=github
+   :target: https://github.com/casperdcl/argopt/pulls
+.. |GitHub-Contributions| image:: https://img.shields.io/github/contributors/casperdcl/argopt.svg?logo=github
+   :target: https://github.com/casperdcl/argopt/graphs/contributors
+.. |GitHub-Updated| image:: https://img.shields.io/github/last-commit/casperdcl/argopt?label=pushed&logo=github
+   :target: https://github.com/casperdcl/argopt/pulse
+.. |Gift-Casper| image:: https://img.shields.io/badge/gift-donate-dc10ff.svg?logo=Contactless%20Payment
+   :target: https://caspersci.uk.to/donate
+.. |PyPI| image:: https://img.shields.io/pypi/v/argopt.svg?logo=PyPI&logoColor=white
+   :target: https://pypi.org/project/argopt
+.. |PyPI-Downloads| image:: https://img.shields.io/pypi/dm/argopt.svg?label=pypi%20downloads&logo=DocuSign
+   :target: https://pypi.org/project/argopt
+.. |Py-Versions| image:: https://img.shields.io/pypi/pyversions/argopt.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/argopt
+.. |Conda-Forge| image:: https://img.shields.io/conda/v/conda-forge/argopt.svg?label=conda-forge&logo=conda-forge
+   :target: https://anaconda.org/conda-forge/argopt
+.. |Libraries-Rank| image:: https://img.shields.io/librariesio/sourcerank/pypi/argopt.svg?color=green&logo=koding
+   :target: https://libraries.io/pypi/argopt
+.. |Libraries-Dependents| image:: https://img.shields.io/librariesio/dependent-repos/pypi/argopt.svg?logo=koding
+    :target: https://github.com/casperdcl/argopt/network/dependents
 .. |OpenHub-Status| image:: https://www.openhub.net/p/arg-opt/widgets/project_thin_badge?format=gif
    :target: https://www.openhub.net/p/arg-opt?ref=Thin+badge
-.. |LICENCE| image:: https://img.shields.io/pypi/l/argopt.svg
-   :target: https://mozilla.org/MPL/2.0/
-.. |Codacy-Grade| image:: https://api.codacy.com/project/badge/Grade/5282d52c142d4c6ea24f978b03981c6f
-   :target: https://www.codacy.com/app/casper-dcl/argopt
-.. |Donate| image:: https://img.shields.io/badge/gift-donate-dc10ff.svg
-   :target: https://caspersci.uk.to/donate.html
+.. |LICENCE| image:: https://img.shields.io/pypi/l/argopt.svg?color=purple&logo=SPDX
+   :target: https://raw.githubusercontent.com/casperdcl/argopt/master/LICENCE
+.. |README-Hits| image:: https://caspersci.uk.to/cgi-bin/hits.cgi?q=argopt&style=social&r=https://github.com/casperdcl/argopt
+   :target: https://caspersci.uk.to/cgi-bin/hits.cgi?q=argopt&a=plot&r=https://github.com/casperdcl/argopt&style=social

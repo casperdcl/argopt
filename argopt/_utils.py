@@ -1,11 +1,6 @@
 import subprocess
 
-__author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
-__date__ = "2016-7"
-__licence__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
 __all__ = ["_range", "typecast", "set_nargs", "_sh", "DictAttrWrap"]
-__copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
-__license__ = __licence__  # weird foreign language
 
 try:  # pragma: no cover
     _range = xrange

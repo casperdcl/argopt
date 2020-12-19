@@ -1,9 +1,11 @@
 *.py[co]
 # build
-argopt.egg-info/
-build/
-dist/
+/argopt/_dist_ver.py
+/.eggs/
+/*.egg-info
+/build/
+/dist/
 # test
 .tox/
 .coverage
-__pycache__
+__pycache__/
