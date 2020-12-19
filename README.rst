@@ -217,8 +217,8 @@ We are grateful for all |GitHub-Contributions|.
 
 |README-Hits|
 
-.. |Build-Status| image:: https://travis-ci.org/casperdcl/argopt.svg?branch=master
-   :target: https://travis-ci.org/casperdcl/argopt
+.. |Build-Status| image:: https://img.shields.io/github/workflow/status/casperdcl/argopt/Test/master?logo=GitHub
+   :target: https://github.com/casperdcl/argopt/actions?query=workflow%3ATest
 .. |Coverage-Status| image:: https://img.shields.io/coveralls/github/casperdcl/argopt/master?logo=coveralls
    :target: https://coveralls.io/github/casperdcl/argopt
 .. |Branch-Coverage-Status| image:: https://codecov.io/gh/casperdcl/argopt/branch/master/graph/badge.svg
