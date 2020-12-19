@@ -1,10 +1,19 @@
 from __future__ import print_function
-import re
+
 import logging
+import re
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
-from ._docopt import Argument, Option, AnyOptions, DocoptLanguageError, \
-    parse_defaults, parse_pattern, printable_usage, formal_usage
+from ._docopt import (
+    AnyOptions,
+    Argument,
+    DocoptLanguageError,
+    Option,
+    formal_usage,
+    parse_defaults,
+    parse_pattern,
+    printable_usage,
+)
 from ._utils import _range, set_nargs
 
 # version detector. Precedence: installed dist, git, 'UNKNOWN'

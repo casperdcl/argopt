@@ -24,7 +24,6 @@
 	testtimer
 	distclean
 	coverclean
-	pre-commit
 	prebuildclean
 	clean
 	toxclean
@@ -71,11 +70,6 @@ distclean:
 	@+make coverclean
 	@+make prebuildclean
 	@+make clean
-pre-commit:
-	# quick sanity checks
-	@make testsetup
-	@flake8 -j 8 --count --statistics .
-	@make testnose
 prebuildclean:
 	@+python -c "import shutil; shutil.rmtree('build', True)"
 	@+python -c "import shutil; shutil.rmtree('dist', True)"

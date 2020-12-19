@@ -1,5 +1,7 @@
-from argopt import argopt
 from argparse import RawDescriptionHelpFormatter
+
+from argopt import argopt
+
 try:
     from StringIO import StringIO
 except ImportError:
