@@ -1,7 +1,9 @@
 [run]
 branch = True
+include = argopt/*
 omit =
     argopt/tests/*
     argopt/_docopt.py
+relative_files = True
 [report]
 show_missing = True

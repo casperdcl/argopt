@@ -45,7 +45,7 @@ jobs:
     if: github.event_name != 'pull_request' || github.head_ref != 'devel'
     strategy:
       matrix:
-        python: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9]
+        python: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9, pypy3]
     name: Python ${{ matrix.python }}
     runs-on: ubuntu-latest
     steps:
@@ -58,7 +58,12 @@ jobs:
     - name: Install
       run: pip install -U tox
     - name: Test
-      run: tox -e py${PYVER/./}
+      run: |
+        if [[ "$PYVER" == py* ]]; then
+          tox -e $PYVER                                             # basic:pypy
+        else
+          tox -e py${PYVER/./}                                      # normal
+        fi
       env:
         PYVER: ${{ matrix.python }}
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -69,6 +74,7 @@ jobs:
   finish:
     if: github.event_name != 'pull_request' || github.head_ref != 'devel'
     name: Coverage
+    continue-on-error: ${{ github.event_name != 'push' }}
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -104,7 +110,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: argopt ${{ github.ref }} stable
@@ -113,7 +119,7 @@ jobs:
     - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ steps.collect_assets.outputs.asset_path }}
@@ -122,7 +128,7 @@ jobs:
     - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ steps.collect_assets.outputs.asset_path_sig }}
