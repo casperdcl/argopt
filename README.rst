@@ -15,9 +15,9 @@ what's actually important - using the arguments in the rest of your program.
 
 The problem is that this is not always flexible. Still need all the features of
 `argparse`? Now have the best of both worlds... all the extension such as
-`argcomplete <https://github.com/kislyuk/argcomplete>`__ or
-`Gooey <https://github.com/chriskiehl/Gooey/>`__ but with the simple syntax of
-`docopt <https://github.com/docopt/docopt/>`__.
+`shtab <https://github.com/iterative/shtab>`__ or
+`Gooey <https://github.com/chriskiehl/Gooey>`__ but with the simple syntax of
+`docopt <https://github.com/docopt/docopt>`__.
 
 ------------------------------------------
 
