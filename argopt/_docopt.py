@@ -115,10 +115,10 @@ class ChildPattern(Pattern):
             if type(value) is bool:
                 self.type = bool
             elif type(value) is str:
-                i = value.rfind(':')
-                if i >= 0:
-                    self.type = eval(value[i + 1:])
-                    self.value = typecast(value[:i], value[i + 1:])
+                i = value.rsplit(':', 1)
+                if len(i) == 2:
+                    self.type = eval(i[1])
+                    self.value = typecast(i[0], i[1])
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (self.__class__.__name__, self.name,
@@ -213,10 +213,10 @@ class Option(ChildPattern):
             if type(value) is bool:
                 self.type = bool
             else:
-                i = value.rfind(':')
-                if i >= 0:
-                    self.type = eval(value[i + 1:])
-                    self.value = typecast(value[:i], value[i + 1:])
+                i = value.rsplit(':', 1)
+                if len(i) == 2:
+                    self.type = eval(i[1])
+                    self.value = typecast(i[0], i[1])
 
     @classmethod
     def parse(class_, option_description):

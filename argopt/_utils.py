@@ -1,12 +1,15 @@
+import logging
 import subprocess
 
 __all__ = ["_range", "typecast", "set_nargs", "_sh", "DictAttrWrap"]
 
-try:  # pragma: no cover
+try:  # py2
     _range = xrange
-except NameError:  # pragma: no cover
+except NameError:  # py3
     _range = range
     file = open
+
+log = logging.getLogger(__name__)
 
 
 class DictAttrWrap(object):
@@ -26,7 +29,11 @@ def typecast(val, typ):
         return None
     if not isinstance(typ, str):
         typ = str(typ).lstrip("<type '").lstrip("<class '").rstrip("'>")
-    return eval(typ + '(' + str(val) + ')')
+    try:
+        return eval(typ + '(' + str(val) + ')')
+    except Exception:
+        log.error("Could not evaluate `%s(%s)`. Maybe missing quotes?", typ, val)
+        raise
 
 
 def set_nargs(all_args, args, n):
@@ -34,11 +41,12 @@ def set_nargs(all_args, args, n):
         a.nargs = n
         try:
             _a = [i for i in all_args if i.name == a.name][0]
+        except IndexError:
+            pass
+        else:
             a.value = _a.value
             a.desc = _a.desc
             a.type = _a.type
-        except IndexError:
-            pass
 
 
 def _sh(*cmd, **kwargs):
