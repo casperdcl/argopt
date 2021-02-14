@@ -114,7 +114,9 @@ class ChildPattern(Pattern):
         if (value is not None) and (typ is None):
             if type(value) is bool:
                 self.type = bool
-            elif type(value) is str:
+            elif value == "None":
+                self.value = None
+            elif hasattr(value, 'rsplit'):
                 i = value.rsplit(':', 1)
                 if len(i) == 2:
                     self.type = eval(i[1])
@@ -212,7 +214,9 @@ class Option(ChildPattern):
         if (value is not None) and (typ is None):
             if type(value) is bool:
                 self.type = bool
-            else:
+            elif value == "None":
+                self.value = None
+            elif hasattr(value, 'rsplit'):
                 i = value.rsplit(':', 1)
                 if len(i) == 2:
                     self.type = eval(i[1])
