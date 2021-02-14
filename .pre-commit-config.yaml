@@ -25,6 +25,15 @@ repos:
     args: [-i]
     types: [text]
     exclude: ^(.pre-commit-config.yaml|.github/workflows/test.yml)$
+  - id: nose
+    name: Run tests
+    language: python
+    entry: nosetests
+    args: ['-d', tests/]
+    types: [python]
+    pass_filenames: false
+    additional_dependencies:
+    - nose
 - repo: https://gitlab.com/pycqa/flake8
   rev: 3.8.4
   hooks:
