@@ -1,11 +1,14 @@
 *.py[co]
+__pycache__/
+
 # build
 /argopt/_dist_ver.py
 /.eggs/
-/*.egg-info
+/*.egg*/
 /build/
 /dist/
+
 # test
-.tox/
-.coverage
-__pycache__/
+/.tox/
+/.coverage*
+/coverage.xml

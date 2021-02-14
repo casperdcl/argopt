@@ -78,6 +78,7 @@ prebuildclean:
 	@+python -c "import os; os.remove('argopt/_dist_ver.py') if os.path.exists('argopt/_dist_ver.py') else None"
 coverclean:
 	@+python -c "import os; os.remove('.coverage') if os.path.exists('.coverage') else None"
+	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('.coverage.*')]"
 	@+python -c "import shutil; shutil.rmtree('argopt/__pycache__', True)"
 	@+python -c "import shutil; shutil.rmtree('argopt/tests/__pycache__', True)"
 clean:
