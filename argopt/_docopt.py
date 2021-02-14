@@ -111,14 +111,19 @@ class ChildPattern(Pattern):
         self.value = value
         self.desc = desc
         self.type = typ
+        self._fix_value_type()
+
+    def _fix_value_type(self):
+        value, typ = self.value, self.type
         if (value is not None) and (typ is None):
             if type(value) is bool:
                 self.type = bool
-            elif value == "None":
-                self.value = None
             elif hasattr(value, 'rsplit'):
                 i = value.rsplit(':', 1)
                 if len(i) == 2:
+                    # potentially used in `eval`, e.g. `partial(open, mode="w")`
+                    from functools import partial  # NOQA: F401
+
                     self.type = eval(i[1])
                     self.value = typecast(i[0], i[1])
 
@@ -210,17 +215,7 @@ class Option(ChildPattern):
         self.type = typ
         self.desc = desc
         self.meta = meta
-
-        if (value is not None) and (typ is None):
-            if type(value) is bool:
-                self.type = bool
-            elif value == "None":
-                self.value = None
-            elif hasattr(value, 'rsplit'):
-                i = value.rsplit(':', 1)
-                if len(i) == 2:
-                    self.type = eval(i[1])
-                    self.value = typecast(i[0], i[1])
+        self._fix_value_type()
 
     @classmethod
     def parse(class_, option_description):

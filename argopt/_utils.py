@@ -1,6 +1,9 @@
 import logging
 import subprocess
 
+# potentially used in `eval`, e.g. `partial(open, mode="w")`
+from functools import partial  # NOQA: F401
+
 __all__ = ["_range", "typecast", "set_nargs", "_sh", "DictAttrWrap"]
 
 try:  # py2
