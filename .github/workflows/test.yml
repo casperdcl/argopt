@@ -64,7 +64,6 @@ jobs:
         fi
       env:
         PYVER: ${{ matrix.python }}
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     - name: Coveralls Parallel
       uses: AndreMiras/coveralls-python-action@develop
       with:
