@@ -53,7 +53,7 @@ test:
 	tox --skip-missing-interpreters -p all
 
 testnose:
-	nosetests argopt -d -v
+	nosetests -d -v tests/
 
 testsetup:
 	python setup.py check --metadata --restructuredtext --strict
@@ -61,10 +61,10 @@ testsetup:
 
 testcoverage:
 	@make coverclean
-	nosetests argopt --with-coverage --cover-package=argopt --cover-erase --cover-min-percentage=80 -d -v
+	nosetests --with-coverage --cover-package=argopt --cover-erase --cover-min-percentage=80 -d -v tests/
 
 testtimer:
-	nosetests argopt --with-timer -d -v
+	nosetests --with-timer -d -v tests/
 
 distclean:
 	@+make coverclean
@@ -78,13 +78,14 @@ prebuildclean:
 	@+python -c "import os; os.remove('argopt/_dist_ver.py') if os.path.exists('argopt/_dist_ver.py') else None"
 coverclean:
 	@+python -c "import os; os.remove('.coverage') if os.path.exists('.coverage') else None"
+	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('.coverage.*')]"
 	@+python -c "import shutil; shutil.rmtree('argopt/__pycache__', True)"
-	@+python -c "import shutil; shutil.rmtree('argopt/tests/__pycache__', True)"
+	@+python -c "import shutil; shutil.rmtree('tests/__pycache__', True)"
 clean:
 	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('*.py[co]')]"
 	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('argopt/*.py[co]')]"
 	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('examples/*.py[co]')]"
-	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('argopt/tests/*.py[co]')]"
+	@+python -c "import os, glob; [os.remove(i) for i in glob.glob('tests/*.py[co]')]"
 toxclean:
 	@+python -c "import shutil; shutil.rmtree('.tox', True)"
 

@@ -95,7 +95,8 @@ checking and default positional arguments.
     __version__ = "0.1.2-3.4"
 
 
-    parser = argopt(__doc__, version=__version__).parse_args()
+    parser = argopt(__doc__, version=__version__)
+    args = parser.parse_args()
     if args.force:
         print(args)
     else:

@@ -106,7 +106,6 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
 
     set_nargs(args, once_args, None)  # setting to `1` creates single-item list
     set_nargs(args, qest_args, '?')
-    set_nargs(args, qest_args, '?')
     set_nargs(args, star_args, '*')
     set_nargs(args, plus_args, '+')
 
