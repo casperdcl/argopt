@@ -21,8 +21,7 @@ jobs:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PYSHA }}|${{ hashFiles('.pre-commit-config.yaml') }}
     - name: Dependencies
-      run: |
-        pip install -U pre-commit
+      run: pip install -U pre-commit
     - uses: reviewdog/action-setup@v1
     - if: github.event_name != 'schedule'
       name: Comment
@@ -100,34 +99,19 @@ jobs:
         password: ${{ secrets.PYPI_TOKEN }}
         gpg_key: ${{ secrets.GPG_KEY }}
         upload: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') }}
-    - name: Changelog
+    - id: meta
+      name: Changelog
       run: |
         git log --pretty='format:%d%n- %s%n%b---' $(git tag --sort=v:refname | tail -n2 | head -n1)..HEAD > _CHANGES.md
+        echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
     - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-      id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: argopt ${{ github.ref }} stable
+        name: argopt ${{ steps.meta.outputs.tag }} stable
         body_path: _CHANGES.md
         draft: true
-    - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/${{ steps.dist.outputs.whl }}
-        asset_name: ${{ steps.dist.outputs.whl }}
-        asset_content_type: application/zip
-    - if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/${{ steps.dist.outputs.whl_asc }}
-        asset_name: ${{ steps.dist.outputs.whl_asc }}
-        asset_content_type: text/plain
+        files: |
+          dist/${{ steps.dist.outputs.whl }}
+          dist/${{ steps.dist.outputs.whl_asc }}
