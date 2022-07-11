@@ -185,8 +185,7 @@ class Argument(ChildPattern):
 
     @property
     def name_stripped(self):
-        return self.name[1:-1] \
-            if self.name[0] == '<' and self.name[-1] == '>' else self.name
+        return self.name[1:-1] if self.name[0] == '<' and self.name[-1] == '>' else self.name
 
 
 class Command(Argument):

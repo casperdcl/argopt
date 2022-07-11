@@ -1,6 +1,6 @@
 import logging
+import re
 import subprocess
-
 # potentially used in `eval`, e.g. `partial(open, mode="w")`
 from functools import partial  # NOQA: F401
 
@@ -31,7 +31,7 @@ def typecast(val, typ):
     if val == 'None':
         return None
     if not isinstance(typ, str):
-        typ = str(typ).lstrip("<type '").lstrip("<class '").rstrip("'>")
+        typ = re.sub("^<(?:type|class) '(.*)'>$", r"\1", str(typ))
     try:
         return eval(typ + '(' + str(val) + ')')
     except Exception:
