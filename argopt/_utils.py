@@ -1,7 +1,6 @@
 import logging
 import re
 import subprocess
-
 # potentially used in `eval`, e.g. `partial(open, mode="w")`
 from functools import partial  # NOQA: F401
 

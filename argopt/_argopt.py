@@ -5,15 +5,8 @@ import re
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 from ._docopt import (
-    AnyOptions,
-    Argument,
-    DocoptLanguageError,
-    Option,
-    formal_usage,
-    parse_defaults,
-    parse_pattern,
-    printable_usage,
-)
+    AnyOptions, Argument, DocoptLanguageError, Option, formal_usage, parse_defaults, parse_pattern,
+    printable_usage)
 from ._utils import _range, set_nargs
 
 # version detector. Precedence: installed dist, git, 'UNKNOWN'
@@ -71,7 +64,7 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     opt_names = []
     opts = []
     for opt in pattern.flat(Option):
-        if not set([opt.short, opt.long]).intersection(opt_names):
+        if not {opt.short, opt.long}.intersection(opt_names):
             opt_names.extend(filter(lambda x: x is not None,
                                     [opt.short, opt.long]))
             opts.append(opt)
