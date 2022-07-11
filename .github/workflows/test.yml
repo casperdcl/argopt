@@ -42,7 +42,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu]
-        python: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9, '3.10', pypy3]
+        python: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9, '3.10']
         include:
         - os: macos
           python: 3.9
@@ -62,12 +62,7 @@ jobs:
     - name: Install
       run: pip install -U tox tox-gh-actions
     - name: Test
-      run: |
-        if [[ "$PYVER" == py* ]]; then
-          tox -e $PYVER                                             # basic:pypy
-        else
-          tox -e py${PYVER/./}                                      # normal
-        fi
+      run: tox -e py${PYVER/./}
       env:
         PYVER: ${{ matrix.python }}
         PLATFORM: ${{ matrix.os }}
