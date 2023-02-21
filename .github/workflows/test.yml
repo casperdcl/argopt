@@ -112,5 +112,3 @@ jobs:
         changelog=$(git log --pretty='format:%d%n- %s%n%b---' $(git tag --sort=v:refname | tail -n2 | head -n1)..HEAD)
         tag="${GITHUB_REF#refs/tags/}"
         gh release create --title "argopt $tag stable" --draft --notes "$changelog" "$tag" dist/${{ steps.dist.outputs.whl }} dist/${{ steps.dist.outputs.whl_asc }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
