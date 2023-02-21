@@ -26,8 +26,7 @@ Arguments:
     --bar=<b>             Another [default: something] should assume str.
     -f, --force           Force.
 '''
-    parser = argopt(doc, version='0.1.2-3.4',
-                    formatter_class=RawDescriptionHelpFormatter)
+    parser = argopt(doc, version='0.1.2-3.4', formatter_class=RawDescriptionHelpFormatter)
     fs = StringIO()
     parser.print_help(file=fs)
     res = fs.getvalue()

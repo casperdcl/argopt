@@ -11,11 +11,7 @@ import re
 
 from ._utils import typecast
 
-try:
-    from ._utils import file  # NOQA
-except ImportError:
-    pass
-
+file = open  # NOQA
 __version__ = '0.6.2-casper.4'
 
 

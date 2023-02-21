@@ -27,27 +27,25 @@ if '--with-gooey' in sys.argv:
     from gooey import GooeyParser as CustomParser
     sys.argv.remove('--with-gooey')
 else:
+
     def Gooey(f):
         return f
+
     from argparse import ArgumentParser as CustomParser
 
 
 @Gooey
 def main():
     try:
-        parser = argopt(__doc__,
-                        argparser=CustomParser,
-                        conflict_handler='resolve',
-                        version='0.1.2-3.4',
-                        epilog='That was fun!')
+        parser = argopt(__doc__, argparser=CustomParser, conflict_handler='resolve',
+                        version='0.1.2-3.4', epilog='That was fun!')
     except IOError as e:
         if "demo_advanced.py" in str(e):
             # Our docstring insists on a default file argument "demo_basic.py"
             # in the current working directory.
-            raise EnvironmentError(
-                'Please change to directory "%s" where "demo_basic.py" exists'
-                ' before re-running "%s"' %
-                (os.path.dirname(__file__), __file__))
+            raise EnvironmentError('Please change to directory "%s" where "demo_basic.py" exists'
+                                   ' before re-running "%s"' %
+                                   (os.path.dirname(__file__), __file__))
         raise
     args = parser.parse_args()
     print(args)

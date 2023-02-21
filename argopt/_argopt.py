@@ -4,10 +4,9 @@ import logging
 import re
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
-from ._docopt import (
-    AnyOptions, Argument, DocoptLanguageError, Option, formal_usage, parse_defaults, parse_pattern,
-    printable_usage)
-from ._utils import _range, set_nargs
+from ._docopt import (AnyOptions, Argument, DocoptLanguageError, Option, formal_usage,
+                      parse_defaults, parse_pattern, printable_usage)
+from ._utils import set_nargs
 
 # version detector. Precedence: installed dist, git, 'UNKNOWN'
 try:
@@ -25,7 +24,6 @@ __copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
 
 log = logging.getLogger(__name__)
 
-
 RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()"
                          r"Argument\('(\S+?)', (\S+?), (\S+?)\)")
 RE_ARG_STAR = re.compile(r"Optional\(OneOrMore\(Argument\("
@@ -40,8 +38,7 @@ def findall_args(re, pattern):
     re  : RE_COMPILED
     pattern  : str
     """
-    return [Argument(i[0], i[1], i[2].rstrip(">'").lstrip("<type '"))
-            for i in re.findall(pattern)]
+    return [Argument(i[0], i[1], i[2].rstrip(">'").lstrip("<type '")) for i in re.findall(pattern)]
 
 
 def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
@@ -65,8 +62,7 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     opts = []
     for opt in pattern.flat(Option):
         if not {opt.short, opt.long}.intersection(opt_names):
-            opt_names.extend(filter(lambda x: x is not None,
-                                    [opt.short, opt.long]))
+            opt_names.extend(filter(lambda x: x is not None, [opt.short, opt.long]))
             opts.append(opt)
         else:
             log.warn("dropped:%r" % opt)
@@ -80,12 +76,12 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
                 opts.append(Option('-v', '--version'))
 
     str_pattern = str(pattern)
-    once_args = findall_args(RE_ARG_ONCE, str_pattern)  # once (arg)
-    qest_args = findall_args(RE_ARG_QEST, str_pattern)  # maybe (arg?)
-    star_args = findall_args(RE_ARG_STAR, str_pattern)  # any (arg*)
-    plus_args = findall_args(RE_ARG_PLUS, str_pattern)  # at least one (arg+)
+    once_args = findall_args(RE_ARG_ONCE, str_pattern) # once (arg)
+    qest_args = findall_args(RE_ARG_QEST, str_pattern) # maybe (arg?)
+    star_args = findall_args(RE_ARG_STAR, str_pattern) # any (arg*)
+    plus_args = findall_args(RE_ARG_PLUS, str_pattern) # at least one (arg+)
 
-    for i in _range(len(once_args) - 1, -1, -1):
+    for i in range(len(once_args) - 1, -1, -1):
         if once_args[i] in plus_args:
             once_args.pop(i)
         elif once_args[i] in star_args:
@@ -93,11 +89,11 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
             plus_args.append(a)
             star_args.remove(a)
 
-    for i in _range(len(plus_args) - 1, -1, -1):
+    for i in range(len(plus_args) - 1, -1, -1):
         if plus_args[i] in star_args:
             star_args.pop(i)
 
-    set_nargs(args, once_args, None)  # setting to `1` creates single-item list
+    set_nargs(args, once_args, None) # setting to `1` creates single-item list
     set_nargs(args, qest_args, '?')
     set_nargs(args, star_args, '*')
     set_nargs(args, plus_args, '+')
@@ -112,8 +108,7 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     return once_args + qest_args + star_args + plus_args, opts
 
 
-def argopt(doc='', argparser=ArgumentParser,
-           formatter_class=RawDescriptionHelpFormatter,
+def argopt(doc='', argparser=ArgumentParser, formatter_class=RawDescriptionHelpFormatter,
            logLevel=logging.NOTSET, **_kwargs):
     """
     Note that `docopt` supports neither type specifiers nor default
@@ -165,9 +160,7 @@ def argopt(doc='', argparser=ArgumentParser,
 
     pu = printable_usage(doc)
     log.log(logLevel, doc[:doc.find(pu)])
-    args, opts = docopt_parser(doc,
-                               logLevel=max(logLevel - 10, logging.NOTSET),
-                               **_kwargs)
+    args, opts = docopt_parser(doc, logLevel=max(logLevel - 10, logging.NOTSET), **_kwargs)
     _kwargs.setdefault("prog", pu.split()[1])
     _kwargs.setdefault("description", doc[:doc.find(pu)])
     # epilogue
@@ -181,8 +174,7 @@ def argopt(doc='', argparser=ArgumentParser,
         pLast = doc.find(pLast)
     else:
         pLast = max(doc.find(pLast), doc.find(pOpts))
-    _kwargs.setdefault("epilog",
-                       '\n\n'.join(doc[pLast:].split('\n\n')[1:]).strip())
+    _kwargs.setdefault("epilog", '\n\n'.join(doc[pLast:].split('\n\n')[1:]).strip())
 
     version = _kwargs.pop('version', None)
     parser = argparser(formatter_class=formatter_class, **_kwargs)

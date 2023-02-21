@@ -2,16 +2,9 @@ import logging
 import re
 import subprocess
 # potentially used in `eval`, e.g. `partial(open, mode="w")`
-from functools import partial  # NOQA: F401
+from functools import partial  # NOQA: F401 # yapf: disable
 
-__all__ = ["_range", "typecast", "set_nargs", "_sh", "DictAttrWrap"]
-
-try:  # py2
-    _range = xrange
-except NameError:  # py3
-    _range = range
-    file = open
-
+__all__ = ["typecast", "set_nargs", "_sh", "DictAttrWrap"]
 log = logging.getLogger(__name__)
 
 
@@ -21,10 +14,7 @@ class DictAttrWrap(object):
         self.d = dict(*a, **k)
 
     def __getattr__(self, k):
-        return self.d.get('--' + k,
-                          self.d.get('<' + k + '>',
-                                     self.d.get('-' + k,
-                                                self.d.get(k))))
+        return self.d.get('--' + k, self.d.get('<' + k + '>', self.d.get('-' + k, self.d.get(k))))
 
 
 def typecast(val, typ):
@@ -53,5 +43,4 @@ def set_nargs(all_args, args, n):
 
 
 def _sh(*cmd, **kwargs):
-    return subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                            **kwargs).communicate()[0].decode('utf-8')
+    return subprocess.Popen(cmd, stdout=subprocess.PIPE, **kwargs).communicate()[0].decode('utf-8')

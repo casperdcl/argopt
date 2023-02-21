@@ -3,13 +3,12 @@ __pycache__/
 
 # build
 /argopt/_dist_ver.py
-/.eggs/
 /*.egg*/
 /build/
 /dist/
-/.pytest_cache/
 
 # test
 /.tox/
 /.coverage*
 /coverage.xml
+/.pytest_cache/

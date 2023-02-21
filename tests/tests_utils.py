@@ -10,8 +10,7 @@ def test_sh():
 
 def test_dictwrap():
     """Test wrapping docopt"""
-    args = _utils.DictAttrWrap({
-        "--foo": 0, "-b": "ar", "<ba>": 'Z', "bat": -1e9})
+    args = _utils.DictAttrWrap({"--foo": 0, "-b": "ar", "<ba>": 'Z', "bat": -1e9})
     assert args.foo == 0
     assert args.b == "ar"
     assert args.ba == 'Z'
