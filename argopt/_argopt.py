@@ -6,7 +6,7 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 from ._docopt import (AnyOptions, Argument, DocoptLanguageError, Option, formal_usage,
                       parse_defaults, parse_pattern, printable_usage)
-from ._utils import _range, set_nargs
+from ._utils import set_nargs
 
 # version detector. Precedence: installed dist, git, 'UNKNOWN'
 try:
@@ -81,7 +81,7 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     star_args = findall_args(RE_ARG_STAR, str_pattern) # any (arg*)
     plus_args = findall_args(RE_ARG_PLUS, str_pattern) # at least one (arg+)
 
-    for i in _range(len(once_args) - 1, -1, -1):
+    for i in range(len(once_args) - 1, -1, -1):
         if once_args[i] in plus_args:
             once_args.pop(i)
         elif once_args[i] in star_args:
@@ -89,7 +89,7 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
             plus_args.append(a)
             star_args.remove(a)
 
-    for i in _range(len(plus_args) - 1, -1, -1):
+    for i in range(len(plus_args) - 1, -1, -1):
         if plus_args[i] in star_args:
             star_args.pop(i)
 

@@ -4,14 +4,7 @@ import subprocess
 # potentially used in `eval`, e.g. `partial(open, mode="w")`
 from functools import partial  # NOQA: F401 # yapf: disable
 
-__all__ = ["_range", "typecast", "set_nargs", "_sh", "DictAttrWrap"]
-
-try:               # py2
-    _range = xrange
-except NameError:  # py3
-    _range = range
-    file = open
-
+__all__ = ["typecast", "set_nargs", "_sh", "DictAttrWrap"]
 log = logging.getLogger(__name__)
 
 
