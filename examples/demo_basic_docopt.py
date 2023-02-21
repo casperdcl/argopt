@@ -23,7 +23,6 @@ from docopt import docopt
 
 __version__ = "0.1.2-3.4"
 
-
 args = docopt(__doc__, version=__version__)
 args["--anarg"] = int(literal_eval(args["--anarg"]))
 if args["--patts"]:

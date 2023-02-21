@@ -6,7 +6,7 @@ from os import path
 from setuptools import setup
 
 src_dir = path.abspath(path.dirname(__file__))
-if sys.argv[1].lower().strip() == 'make':  # exec Makefile commands
+if sys.argv[1].lower().strip() == 'make': # exec Makefile commands
     import pymake
     fpath = path.join(src_dir, 'Makefile')
     pymake.main(['-f', fpath] + sys.argv[2:])
