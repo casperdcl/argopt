@@ -18,18 +18,15 @@ except ImportError:
     except (ImportError, LookupError):
         __version__ = "UNKNOWN"
 __author__ = "Casper da Costa-Luis <casper@caspersci.uk.to>"
-__date__ = "2016-2020"
+__date__ = "2016-2023"
 __licence__ = __license__ = "[MPLv2.0](https://mozilla.org/MPL/2.0/)"
 __copyright__ = ' '.join(("Copyright (c)", __date__, __author__, __licence__))
 
 log = logging.getLogger(__name__)
 
-RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()"
-                         r"Argument\('(\S+?)', (\S+?), (\S+?)\)")
-RE_ARG_STAR = re.compile(r"Optional\(OneOrMore\(Argument\("
-                         r"'(\S+?)', (\S+?), (\S+?)\)\)\)")
-RE_ARG_PLUS = re.compile(r"(?<!Optional\()"
-                         r"OneOrMore\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
+RE_ARG_ONCE = re.compile(r"(?<!Optional\(|neOrMore\()Argument\('(\S+?)', (\S+?), (\S+?)\)")
+RE_ARG_STAR = re.compile(r"Optional\(OneOrMore\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)\)")
+RE_ARG_PLUS = re.compile(r"(?<!Optional\()OneOrMore\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
 RE_ARG_QEST = re.compile(r"Optional\(Argument\('(\S+?)', (\S+?), (\S+?)\)\)")
 
 
@@ -46,8 +43,8 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
     doc  : docopt compatible, with optional type specifiers [default: '':str].
     """
     options, args = parse_defaults(doc)
-    log.log(logLevel, "options:%r" % options)
-    log.log(logLevel, "args:%r" % args)
+    log.log(logLevel, "options:%r", options)
+    log.log(logLevel, "args:%r", args)
     usage = printable_usage(doc)
     pattern = parse_pattern(formal_usage(usage), options)
     # pattern_arguments = pattern.flat(Argument)
@@ -65,8 +62,8 @@ def docopt_parser(doc='', logLevel=logging.NOTSET, **_kwargs):
             opt_names.extend(filter(lambda x: x is not None, [opt.short, opt.long]))
             opts.append(opt)
         else:
-            log.warn("dropped:%r" % opt)
-    log.log(logLevel, "opts:%r" % opts)
+            log.warn("dropped:%r", opt)
+    log.log(logLevel, "opts:%r", opts)
 
     if 'version' in _kwargs:
         if not any(o.name == '--version' for o in opts):
@@ -180,7 +177,7 @@ def argopt(doc='', argparser=ArgumentParser, formatter_class=RawDescriptionHelpF
     parser = argparser(formatter_class=formatter_class, **_kwargs)
 
     for a in args:
-        log.log(logLevel, "a:%r" % a)
+        log.log(logLevel, "a:%r", a)
         k = {}
         if a.type is not None:
             k['type'] = a.type
@@ -188,7 +185,7 @@ def argopt(doc='', argparser=ArgumentParser, formatter_class=RawDescriptionHelpF
             k['default'] = a.value
         parser.add_argument(a.name_stripped, nargs=a.nargs, help=a.desc, **k)
     for o in opts:
-        log.log(logLevel, "o:%r" % o)
+        log.log(logLevel, "o:%r", o)
         if o.name in ('-h', '--help'):
             continue
         if '--version' == o.name:
