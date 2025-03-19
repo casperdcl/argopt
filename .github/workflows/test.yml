@@ -53,6 +53,8 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    environment: pypi
+    permissions: {contents: write, id-token: write, packages: write}
     steps:
     - uses: actions/checkout@v4
       with: {fetch-depth: 0}
@@ -63,7 +65,6 @@ jobs:
       uses: casperdcl/deploy-pypi@v2
       with:
         build: true
-        password: ${{ secrets.PYPI_TOKEN }}
         gpg_key: ${{ secrets.GPG_KEY }}
         upload: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags') }}
     - if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
