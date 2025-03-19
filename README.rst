@@ -260,5 +260,5 @@ We are grateful for all |GitHub-Contributions|.
    :target: https://www.openhub.net/p/arg-opt?ref=Thin+badge
 .. |LICENCE| image:: https://img.shields.io/pypi/l/argopt.svg?color=purple&logo=SPDX
    :target: https://raw.githubusercontent.com/casperdcl/argopt/master/LICENCE
-.. |README-Hits| image:: https://caspersci.uk.to/cgi-bin/hits.cgi?q=argopt&style=social&r=https://github.com/casperdcl/argopt
-   :target: https://caspersci.uk.to/cgi-bin/hits.cgi?q=argopt&a=plot&r=https://github.com/casperdcl/argopt&style=social
+.. |README-Hits| image:: https://cgi.cdcl.ml/hits?q=argopt&style=social&r=https://github.com/casperdcl/argopt
+   :target: https://cgi.cdcl.ml/hits?q=argopt&a=plot&r=https://github.com/casperdcl/argopt&style=social
