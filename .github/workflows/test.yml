@@ -49,7 +49,7 @@ jobs:
           python: 3.11
         - os: windows
           python: 3.11
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}-${{ matrix.python == 3.7 && '22.04' || 'latest' }}
     defaults:
       run:
         shell: bash
