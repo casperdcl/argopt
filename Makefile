@@ -1,4 +1,4 @@
-# IMPORTANT: for compatibility with `python setup.py make [alias]`, ensure:
+# IMPORTANT: for compatibility with `python -m pymake [alias]`, ensure:
 # 1. Every alias is preceded by @[+]make (eg: @make alias)
 # 2. A maximum of one @make alias or command per line
 # see: https://github.com/tqdm/py-make/issues/1
@@ -8,7 +8,7 @@
 	all
 	flake8
 	test
-	testnose
+	pytest
 	testsetup
 	testcoverage
 	testtimer
@@ -17,7 +17,8 @@
 	prebuildclean
 	clean
 	toxclean
-	installdev
+	install_build
+	install_dev
 	install
 	build
 	buildupload
@@ -25,7 +26,7 @@
 	none
 
 help:
-	@python setup.py make -p
+	@python -m pymake -p
 
 alltests:
 	@+make testcoverage
@@ -37,24 +38,23 @@ all:
 	@+make build
 
 flake8:
-	@+flake8 -j 8 --count --statistics --exit-zero .
+	@+pre-commit run -a flake8
 
 test:
 	tox --skip-missing-interpreters -p all
 
-testnose:
-	nosetests -d -v tests/
+pytest:
+	pytest
 
 testsetup:
-	python setup.py check --metadata --restructuredtext --strict
-	python setup.py make none
+	@make help
 
 testcoverage:
 	@make coverclean
-	nosetests --with-coverage --cover-package=argopt --cover-erase --cover-min-percentage=80 -d -v tests/
+	pytest --cov=argopt --cov-report=xml --cov-report=term --cov-fail-under=80
 
 testtimer:
-	nosetests --with-timer -d -v tests/
+	pytest
 
 distclean:
 	@+make coverclean
@@ -79,22 +79,21 @@ clean:
 toxclean:
 	@+python -c "import shutil; shutil.rmtree('.tox', True)"
 
-
-installdev:
-	python setup.py develop --uninstall
-	python setup.py develop
-
 install:
-	python setup.py install
+	python -m pip install .
+install_dev:
+	python -m pip install -e .
+install_build:
+	python -m pip install -r .meta/requirements-build.txt
 
 build:
 	@make prebuildclean
 	@make testsetup
-	python setup.py sdist bdist_wheel
-	# python setup.py bdist_wininst
+	python -m build
+	python -m twine check dist/*
 
 pypi:
-	twine upload dist/*
+	python -m twine upload dist/*
 
 buildupload:
 	@make build
