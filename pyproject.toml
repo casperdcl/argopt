@@ -80,11 +80,6 @@ classifiers = [
     "Topic :: System :: Shells",
     "Topic :: Terminals",
     "Topic :: Utilities"]
-dependencies = [
-    "argopt>=0.3.5",
-    'importlib_resources; python_version < "3.9"',
-    "tabulate",
-    "tqdm>=4.44.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=6", "pytest-cov", "pytest-timeout", "pytest-xdist"]
