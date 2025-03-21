@@ -10,7 +10,7 @@ write_to_template = "__version__ = '{version}'\n"
 # version_file_template = "__version__ = '{version}'\n"
 
 [tool.setuptools.packages.find]
-exclude = ["tests"]
+exclude = ["tests", "examples"]
 
 [project.urls]
 repository = "https://github.com/casperdcl/argopt"
